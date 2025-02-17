@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.ApoloInsightsBackEnd.DTO.DadosAtualizacaoUsuario;
 import school.sptech.ApoloInsightsBackEnd.DTO.DadosCadastroUsuario;
@@ -27,8 +26,10 @@ public class UsuarioController {
 
     @PutMapping("/atualizar")
     public ResponseEntity atualizar(@Valid @RequestBody DadosAtualizacaoUsuario dados){
-        System.out.println(dados);
         Usuario usuario = service.atualizar(dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
     }
+
+
+
 }

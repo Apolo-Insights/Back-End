@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import school.sptech.ApoloInsightsBackEnd.DTO.DadosAtualizacaoUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
+import school.sptech.ApoloInsightsBackEnd.util.security.SenhaUtil;
 
 @Service
 public class UsuarioService {
@@ -16,6 +17,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario cadastrar(Usuario usuario){
+        usuario.setSenha(SenhaUtil.hashSenha(usuario.getSenha()));
         return repository.save(usuario);
     }
 

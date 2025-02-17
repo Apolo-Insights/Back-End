@@ -10,6 +10,7 @@ import java.util.Optional;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Setter
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
@@ -37,25 +38,5 @@ public class Usuario {
         Optional.ofNullable(dados.nome()).ifPresent(nome -> this.nome = nome);
         Optional.ofNullable(dados.telefone()).ifPresent(telefone -> this.telefone = telefone);
         Optional.ofNullable(dados.email()).ifPresent(email -> this.email = email);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getSenha() {
-        return senha;
     }
 }
