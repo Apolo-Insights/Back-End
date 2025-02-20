@@ -1,17 +1,26 @@
 package school.sptech.ApoloInsightsBackEnd.DTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 
 public record DadosCadastroUsuario(
-        @NotBlank
+        @NotBlank(message = "Nome inválido")
         String nome,
 
-        @NotBlank
+        @NotBlank(message = "Telefone inválido")
         String telefone,
 
-        @NotBlank
+        @NotNull(message = "Data de Nascimento inválida")
+        LocalDate dataNascimento,
+
+        @NotBlank(message = "CPF inválido")
+        String cpf,
+
+        @NotBlank(message = "Email inválido")
         String email,
 
-        @NotBlank
+        @NotBlank(message = "Senha inválida")
         String senha
 ){}

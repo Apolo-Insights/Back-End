@@ -3,8 +3,15 @@ package school.sptech.ApoloInsightsBackEnd.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import school.sptech.ApoloInsightsBackEnd.DTO.DadosAtualizacaoUsuario;
 import school.sptech.ApoloInsightsBackEnd.DTO.DadosCadastroUsuario;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -15,13 +22,15 @@ import java.util.Optional;
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
+    private String cpf;
+    private LocalDate dataNascimento;
     private String telefone;
     private String email;
     private String senha;
@@ -29,6 +38,8 @@ public class Usuario {
 
     public Usuario(DadosCadastroUsuario dados) {
         this.nome = dados.nome();
+        this.cpf = dados.cpf();
+        this.dataNascimento = dados.dataNascimento();
         this.telefone = dados.telefone();
         this.email = dados.email();
         this.senha = dados.senha();
@@ -39,4 +50,41 @@ public class Usuario {
         Optional.ofNullable(dados.telefone()).ifPresent(telefone -> this.telefone = telefone);
         Optional.ofNullable(dados.email()).ifPresent(email -> this.email = email);
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 }

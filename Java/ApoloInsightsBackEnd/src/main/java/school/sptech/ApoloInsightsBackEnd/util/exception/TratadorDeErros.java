@@ -7,6 +7,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,9 +42,9 @@ public class TratadorDeErros {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação");
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity tratarErroAcessoNegado() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado");
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity tratarUsuarioNaoEncontrado(UsernameNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
     }
 
     @ExceptionHandler(Exception.class)

@@ -12,7 +12,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -29,6 +29,8 @@ public class UsuarioController {
         Usuario usuario = service.atualizar(dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
     }
+
+
 
 
 
