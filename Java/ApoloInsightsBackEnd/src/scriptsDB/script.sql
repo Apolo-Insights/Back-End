@@ -7,7 +7,6 @@ CREATE TABLE usuarios (
     cpf char (11) NOT NULL,
     telefone VARCHAR(20) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL
+    senha VARCHAR(255) NOT NULL,
+    status BOOLEAN NOT NULL
 );
-
-select * from usuarios;

@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.DTO;
+package school.sptech.ApoloInsightsBackEnd.DTO.usuario;
 
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 

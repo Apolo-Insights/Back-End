@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.DTO;
+package school.sptech.ApoloInsightsBackEnd.DTO.usuario;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;

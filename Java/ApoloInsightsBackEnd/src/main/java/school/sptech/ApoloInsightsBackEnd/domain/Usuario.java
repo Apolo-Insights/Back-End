@@ -6,8 +6,8 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import school.sptech.ApoloInsightsBackEnd.DTO.DadosAtualizacaoUsuario;
-import school.sptech.ApoloInsightsBackEnd.DTO.DadosCadastroUsuario;
+import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosAtualizacaoUsuario;
+import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosCadastroUsuario;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -32,23 +32,25 @@ public class Usuario implements UserDetails {
     private String cpf;
     private LocalDate dataNascimento;
     private String telefone;
+    private Genero genero;
+    private String alergia;
     private String email;
     private String senha;
-
 
     public Usuario(DadosCadastroUsuario dados) {
         this.nome = dados.nome();
         this.cpf = dados.cpf();
         this.dataNascimento = dados.dataNascimento();
+        this.genero = dados.genero();
         this.telefone = dados.telefone();
         this.email = dados.email();
         this.senha = dados.senha();
     }
 
     public void atualizarInformacoes(DadosAtualizacaoUsuario dados){
-        Optional.ofNullable(dados.nome()).ifPresent(nome -> this.nome = nome);
-        Optional.ofNullable(dados.telefone()).ifPresent(telefone -> this.telefone = telefone);
-        Optional.ofNullable(dados.email()).ifPresent(email -> this.email = email);
+        if (dados.nome() != null) this.nome = dados.nome();
+        if (dados.telefone() != null) this.telefone = dados.telefone();
+        if (dados.email() != null) this.email = dados.email();
     }
 
     @Override

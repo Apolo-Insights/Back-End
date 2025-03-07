@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.ApoloInsightsBackEnd.DTO.DadosLogin;
+import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosLogin;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
 import school.sptech.ApoloInsightsBackEnd.util.security.DadosTokenJWT;
