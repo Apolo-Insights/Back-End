@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.DTO.servico;
+package school.sptech.ApoloInsightsBackEnd.domain.DTO.servico;
 
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 

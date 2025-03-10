@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosAtualizacaoUsuario;
-import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosCadastroUsuario;
-import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosDetalhamentoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosDetalhamentoUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
 
@@ -30,12 +30,10 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
     }
 
-
-
     @DeleteMapping
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<String> deletar(@PathVariable Long id){
         service.deletar(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
     }
 
 }

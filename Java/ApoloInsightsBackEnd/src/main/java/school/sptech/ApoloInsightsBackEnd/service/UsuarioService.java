@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import school.sptech.ApoloInsightsBackEnd.DTO.usuario.DadosAtualizacaoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
 import school.sptech.ApoloInsightsBackEnd.util.security.SenhaUtil;

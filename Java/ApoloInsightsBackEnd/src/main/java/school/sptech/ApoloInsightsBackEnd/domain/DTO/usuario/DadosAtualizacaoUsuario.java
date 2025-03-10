@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.DTO.usuario;
+package school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario;
 
 import jakarta.validation.constraints.NotNull;
 

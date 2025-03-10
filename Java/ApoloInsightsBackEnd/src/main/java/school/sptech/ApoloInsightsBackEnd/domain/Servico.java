@@ -4,8 +4,8 @@ package school.sptech.ApoloInsightsBackEnd.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-import school.sptech.ApoloInsightsBackEnd.DTO.servico.DadosAtualizacaoServico;
-import school.sptech.ApoloInsightsBackEnd.DTO.servico.DadosCadastroServico;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosCadastroServico;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor

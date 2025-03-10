@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.DTO.servico;
+package school.sptech.ApoloInsightsBackEnd.domain.DTO.servico;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
