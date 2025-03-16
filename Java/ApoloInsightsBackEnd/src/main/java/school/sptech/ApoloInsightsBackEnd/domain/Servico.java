@@ -30,10 +30,12 @@ public class Servico {
         this.foto = dados.foto();
     }
 
-    public Servico(DadosAtualizacaoServico dados) {
+    public void atualizarInformacoes(DadosAtualizacaoServico dados) {
         if (dados.nome() != null) this.nome = dados.nome();
         if (dados.descricao() != null) this.descricao = dados.descricao();
         if (dados.preco() != null) this.preco = dados.preco();
         if (dados.foto() != null) this.foto = dados.foto();
     }
+
+
 }

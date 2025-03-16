@@ -29,6 +29,7 @@ public class ServicoService {
     public Servico atualizar (DadosAtualizacaoServico dados){
         Servico servico = repository.findById(dados.id())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado"));
+        servico.atualizarInformacoes(dados);
         return repository.save(servico);
     }
 

@@ -35,7 +35,7 @@ public class UsuarioController {
 //        return ResponseEntity.ok(new DadosListagemUsuario(service.listar()));
 //    }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id){
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");

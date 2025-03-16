@@ -1,5 +1,6 @@
 package school.sptech.ApoloInsightsBackEnd.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +23,13 @@ public class ServicoController {
     ServicoService service;
 
     @PostMapping
-    public ResponseEntity<DadosDetalhamentoServico> cadastrarServico(DadosCadastroServico dados) {
+    public ResponseEntity<DadosDetalhamentoServico> cadastrarServico(@Valid @RequestBody DadosCadastroServico dados) {
         Servico servico = service.cadastrar(new Servico(dados));
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoServico(servico));
     }
 
     @PutMapping
-    public ResponseEntity<DadosDetalhamentoServico> atualizarServico(DadosAtualizacaoServico dados) {
+    public ResponseEntity<DadosDetalhamentoServico> atualizarServico(@Valid @RequestBody DadosAtualizacaoServico dados) {
         Servico servico = service.atualizar(dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoServico(servico));
     }
@@ -39,7 +40,7 @@ public class ServicoController {
         return ResponseEntity.ok(page);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Livro deletado com sucesso!");
