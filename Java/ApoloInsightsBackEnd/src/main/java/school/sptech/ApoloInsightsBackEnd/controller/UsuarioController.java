@@ -30,6 +30,11 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
     }
 
+//    @GetMapping
+//    public ResponseEntity<DadosListagemUsuario> listar(){
+//        return ResponseEntity.ok(new DadosListagemUsuario(service.listar()));
+//    }
+
     @DeleteMapping
     public ResponseEntity<String> deletar(@PathVariable Long id){
         service.deletar(id);

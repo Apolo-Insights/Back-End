@@ -7,11 +7,9 @@ import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 public record DadosListagemServico(
         @NotBlank(message = "O nome do Serviço não foi inserido")
         String nome,
-        @NotBlank(message = "A descrição do Serviço não foi inserida")
         String descricao,
         @NotNull(message = "O preço do Serviço não foi inserido")
         Double preco,
-        @NotBlank(message = "A foto do Serviço não foi inserida")
         String foto
 ) {
         public DadosListagemServico(Servico servico){

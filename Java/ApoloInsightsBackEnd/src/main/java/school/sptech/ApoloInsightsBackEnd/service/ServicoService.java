@@ -33,6 +33,9 @@ public class ServicoService {
     }
 
     public Page<DadosListagemServico> listar(Pageable paginacao){
+        if (repository.findAll().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum serviço encontrado");
+        }
         return repository.findAll(paginacao).map(DadosListagemServico::new);
     }
 

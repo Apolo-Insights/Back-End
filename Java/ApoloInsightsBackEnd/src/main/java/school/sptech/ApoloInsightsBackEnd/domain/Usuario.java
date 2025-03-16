@@ -32,7 +32,6 @@ public class Usuario implements UserDetails {
     private LocalDate dataNascimento;
     private String telefone;
     private Genero genero;
-    private String alergia;
     private String email;
     private String senha;
 

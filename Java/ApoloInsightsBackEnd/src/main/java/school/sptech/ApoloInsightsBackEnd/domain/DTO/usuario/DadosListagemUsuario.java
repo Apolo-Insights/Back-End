@@ -3,10 +3,12 @@ package school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import school.sptech.ApoloInsightsBackEnd.domain.Genero;
+import school.sptech.ApoloInsightsBackEnd.domain.Servico;
+import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 
 import java.time.LocalDate;
 
-public record DadosCadastroUsuario(
+public record DadosListagemUsuario(
         @NotBlank(message = "Nome inválido")
         String nome,
 
@@ -23,8 +25,14 @@ public record DadosCadastroUsuario(
         Genero genero,
 
         @NotBlank(message = "Email inválido")
-        String email,
-
-        @NotBlank(message = "Senha inválida")
-        String senha
-){}
+        String email
+) {
+    public DadosListagemUsuario(Usuario usuario){
+        this(   usuario.getNome(),
+                usuario.getTelefone(),
+                usuario.getDataNascimento(),
+                usuario.getCpf(),
+                usuario.getGenero(),
+                usuario.getEmail());
+    }
+}
