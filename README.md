@@ -8,9 +8,8 @@ Abaixo estão as principais tecnologias empregadas no desenvolvimento deste proj
 
 - **🟡 Java** - Linguagem principal do projeto
 - **🌱 Spring Boot** - Framework para desenvolvimento de aplicações Java
-- **🗄️ Banco de Dados** - Utilização de banco de dados relacional (Ex: MySQL, PostgreSQL)
-- **🐳 Docker** - Para conteinerização da aplicação, garantindo portabilidade e facilidade de implantação
+- **🗄️ Banco de Dados** - Utilização do banco de dados relacional Mysql
 
----
 
-![Java Logo](https://www.oracle.com/a/tech/img/cb88-java-logo.png)
+
+![Java Logo](https://upload.wikimedia.org/wikipedia/pt/3/30/Java_programming_language_logo.svg)
