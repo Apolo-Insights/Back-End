@@ -1,13 +1,16 @@
-Projeto Back-End do software da Berthollo
+# 📌 Projeto Back-End do Software da Berthollo
 
-Este repositório contém o código-fonte do back-end do software desenvolvido para a Berthollo. O objetivo do projeto é fornecer uma base robusta e escalável para as funcionalidades principais do sistema.
+Bem-vindo ao repositório do back-end do software desenvolvido para a Berthollo. Este projeto tem como objetivo fornecer uma base robusta, escalável e eficiente para as funcionalidades essenciais do sistema.
 
-Tecnologias Utilizadas
+## 🚀 Tecnologias Utilizadas
 
-Java - Linguagem principal do projeto
+Abaixo estão as principais tecnologias empregadas no desenvolvimento deste projeto:
 
-Spring Boot - Framework para desenvolvimento de aplicações Java
+- **🟡 Java** - Linguagem principal do projeto
+- **🌱 Spring Boot** - Framework para desenvolvimento de aplicações Java
+- **🗄️ Banco de Dados** - Utilização de banco de dados relacional (Ex: MySQL, PostgreSQL)
+- **🐳 Docker** - Para conteinerização da aplicação, garantindo portabilidade e facilidade de implantação
 
-Banco de Dados - Utilização de banco de dados relacional
+---
 
-![Java Logo](https://upload.wikimedia.org/wikipedia/pt/3/30/Java_programming_language_logo.svg)
+![Java Logo](https://www.oracle.com/a/tech/img/cb88-java-logo.png)
