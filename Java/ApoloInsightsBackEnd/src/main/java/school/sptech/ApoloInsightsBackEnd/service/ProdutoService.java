@@ -18,28 +18,30 @@ public class ProdutoService {
 
     public Produto cadastrarProduto(Produto produto){
         if (repository.existsByCodigoDoProdutoIgnoreCase(produto.getCodigoDoProduto())) {
-            throw new ProdutoConflitoException("O produto com o código %s já existe no sistema");
+            throw new ProdutoConflitoException("O produto com o código %s já existe no sistema"
+                    .formatted(produto));
         }
         return repository.save(produto);
     }
 
-    public void buscarProdutoPorCodigo(String codigo) {
+    public Produto buscarProdutoPorCodigo(String codigo) {
 
-        Optional<Produto> produtos = repository.findByCodigoDoProduto(codigo);
-
-        if (produtos.isEmpty()) {
-            throw new ProdutoNaoEcontradoException(
-                    ("O produto com o código %s não foi encontrado no sistema."
-                            .formatted(codigo))
-            );
-        }
+        return repository.findByCodigoDoProduto(codigo)
+                .orElseThrow(() -> new ProdutoNaoEcontradoException(
+                        String.format("O produto com o código %s não foi encontrado no sistema.", codigo)
+                ));
     }
 
     public List<Produto> listarProdutos(){
         return repository.findAll();
     }
 
-    public Produto deletarProduto(){
 
+
+    public void deletarProduto(Integer id){
+        if (!repository.existsById(id)) {
+            throw new ProdutoNaoEcontradoException("Produto com o id %d não foi encontrado no sistema!");
+        }
+         repository.deleteById(id);
     }
 }
