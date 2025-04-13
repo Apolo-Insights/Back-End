@@ -31,6 +31,8 @@ public class Usuario implements UserDetails {
     private String cpf;
     private LocalDate dataNascimento;
     private String telefone;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private Genero genero;
     private String email;
     private String senha;
