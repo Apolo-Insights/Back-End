@@ -6,6 +6,8 @@ import school.sptech.ApoloInsightsBackEnd.domain.Produto;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 
 public record DadosListagemProduto(
+
+        Long id,
         @NotBlank(message = "O nome do produto não foi inserido")
         String nome,
         String descricao,
@@ -15,6 +17,7 @@ public record DadosListagemProduto(
 ) {
         public DadosListagemProduto(Produto produto){
                 this(
+                        produto.getId(),
                         produto.getNome(),
                         produto.getDescricao(),
                         produto.getPreco(),

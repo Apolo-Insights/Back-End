@@ -25,8 +25,12 @@ public class TokenService {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API Apolo Insights")
-                    .withSubject(usuario.getEmail())
-                    .withClaim("nome", usuario.getNome()) // Adiciona o nome como uma claim
+                    .withSubject(String.valueOf(usuario.getId())) // ID como subject
+                    .withClaim("id", usuario.getId()) // ID também como claim
+                    .withClaim("email", usuario.getEmail())
+                    .withClaim("nome", usuario.getNome())
+                    .withClaim("cpf", usuario.getCpf())
+                    .withClaim("telefone", usuario.getTelefone())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){
@@ -65,3 +69,4 @@ public class TokenService {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
+

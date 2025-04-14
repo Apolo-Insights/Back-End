@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosAtualizacaoProduto;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosDetalhamentoProduto;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosListagemProduto;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.ProdutoDetalhesDTO;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
@@ -45,6 +47,12 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum Produto encontrado");
         }
         return repository.findAll(paginacao).map(DadosListagemProduto::new);
+    }
+
+    public ProdutoDetalhesDTO buscarPorId(Long id) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+        return new ProdutoDetalhesDTO(produto);
     }
 
     public void deletar(Long id){

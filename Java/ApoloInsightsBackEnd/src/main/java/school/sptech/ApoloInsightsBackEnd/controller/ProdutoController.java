@@ -8,10 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosAtualizacaoProduto;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosCadastroProduto;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosDetalhamentoProduto;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosListagemProduto;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.*;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
 import school.sptech.ApoloInsightsBackEnd.service.ProdutoService;
 
@@ -38,6 +35,12 @@ public class ProdutoController {
     public ResponseEntity<Page<DadosListagemProduto>> listar(@PageableDefault(size = 6, sort = {"nome"}) Pageable paginacao) {
         var page = service.listar(paginacao);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoDetalhesDTO> buscarPorId(@PathVariable Long id){
+        var detalhesProduto = service.buscarPorId(id);
+        return ResponseEntity.ok(detalhesProduto);
     }
 
     @DeleteMapping("/{id}")
