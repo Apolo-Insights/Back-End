@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,13 @@ public class TokenService {
 
     public String gerarToken(Usuario usuario){
         try {
-            var algoritimo = Algorithm.HMAC256(secret);
+            var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API Apolo Insights")
                     .withSubject(usuario.getEmail())
+                    .withClaim("nome", usuario.getNome()) // Adiciona o nome como uma claim
                     .withExpiresAt(dataExpiracao())
-                    .sign(algoritimo);
+                    .sign(algoritmo);
         } catch (JWTCreationException exception){
             throw new RuntimeException("ERRO AO GERAR O TOKEN JWT", exception);
         }
@@ -41,6 +43,20 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException exception){
+            throw new RuntimeException("Token JWT inválido ou expirado!", exception);
+        }
+    }
+
+    public String getNome(String tokenJWT) {
+        try {
+            var algoritmo = Algorithm.HMAC256(secret);
+            DecodedJWT decodedJWT = JWT.require(algoritmo)
+                    .withIssuer("API Apolo Insights")
+                    .build()
+                    .verify(tokenJWT);
+
+            return decodedJWT.getClaim("nome").asString();
+        } catch (JWTVerificationException exception) {
             throw new RuntimeException("Token JWT inválido ou expirado!", exception);
         }
     }
