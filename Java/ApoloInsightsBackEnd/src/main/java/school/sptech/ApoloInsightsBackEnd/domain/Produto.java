@@ -5,34 +5,40 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosAtualizacaoProduto;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosCadastroProduto;
 
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Produto {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Integer id;
+    private Long id;
     private String nome;
     private String descricao;
-    private Double valor;
+    private Double preco;
+    private String foto;
 
-
-
-    public Produto() {
-
+    public Produto(@Valid DadosCadastroProduto dados) {
+        this.nome = dados.nome();
+        this.descricao = dados.descricao();
+        this.preco = dados.preco();
+        this.foto = dados.foto();
     }
 
-    public Produto(Integer id, String codigo, String nome, String descricao, Double valor) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.valor = valor;
+    public void atualizarInformacoes(DadosAtualizacaoProduto dados) {
+        if (dados.nome() != null) this.nome = dados.nome();
+        if (dados.descricao() != null) this.descricao = dados.descricao();
+        if (dados.preco() != null) this.preco = dados.preco();
+        if (dados.foto() != null) this.foto = dados.foto();
     }
 }

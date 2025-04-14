@@ -1,13 +1,22 @@
 package school.sptech.ApoloInsightsBackEnd.service;
 
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosAtualizacaoProduto;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosListagemProduto;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
+import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.repository.ProdutoRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.ProdutoException;
-
-import java.util.List;
 
 
 @Service
@@ -18,30 +27,30 @@ public class ProdutoService {
     private ProdutoRepository repository;
 
 
-    public Produto cadastrar(Produto produto) {
-        if (repository.existsById(produto.getId())) {
-            throw  new ProdutoException
-                    ("Produto com o id %d já existe");
-        }
+    @Transactional
+    public Produto cadastrar (Produto produto){
         return repository.save(produto);
-}
-    public Produto buscarPorId (Integer id){
-
-        return repository.findById(id)
-                .orElseThrow(
-                        ()  -> new ProdutoException
-                                ("Produto de id: %d não encontrado".formatted(id)));
     }
 
-    public List<Produto> listar(){
-        return repository.findAll();
+    @Transactional
+    public Produto atualizar (DadosAtualizacaoProduto dados){
+        Produto produto = repository.findById(dados.id())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+        produto.atualizarInformacoes(dados);
+        return repository.save(produto);
     }
 
-    public void removerPorId(Integer id) {
-
-        if (!repository.existsById(id)) {
-            throw new ProdutoException("Produto não encontrado");
+    public Page<DadosListagemProduto> listar(Pageable paginacao){
+        if (repository.findAll().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum Produto encontrado");
         }
-        repository.deleteById(id);
+        return repository.findAll(paginacao).map(DadosListagemProduto::new);
+    }
+
+    public void deletar(Long id){
+        Produto servico = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+
+        repository.delete(servico);
     }
 }
