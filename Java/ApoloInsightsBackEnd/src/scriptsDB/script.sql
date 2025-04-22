@@ -1,6 +1,6 @@
-drop database apoloinsights;
-create database apoloInsights;
-use apoloInsights;
+DROP DATABASE IF EXISTS apoloInsights;
+CREATE DATABASE apoloInsights;
+USE apoloInsights;
 
 CREATE TABLE usuarios (
                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -13,13 +13,20 @@ CREATE TABLE usuarios (
                           senha VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE categorias (
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            nome VARCHAR(255) NOT NULL,
+                            foto VARCHAR(255)
+);
 
 CREATE TABLE servicos (
                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                          categoria_id BIGINT,
                           nome VARCHAR(255) NOT NULL,
                           descricao VARCHAR(255),
                           preco DECIMAL(10,2) NOT NULL,
-                          foto VARCHAR(255)
+                          foto VARCHAR(255),
+                          CONSTRAINT fk_categoria FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
 
 CREATE TABLE produtos (
@@ -30,32 +37,32 @@ CREATE TABLE produtos (
                           foto VARCHAR(255)
 );
 
-select * from produtos;
-
 CREATE TABLE horarios_disponiveis (
-                                      id SERIAL PRIMARY KEY,
+                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                       data DATE,
                                       hora TIME,
                                       reservado BOOLEAN DEFAULT false
 );
 
+
 CREATE TABLE agendamentos (
-                              id SERIAL PRIMARY KEY,
-                              usuario_id BIGINT REFERENCES usuarios(id),
-                              servico_id BIGINT REFERENCES servicos(id),
+                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                              usuario_id BIGINT,
+                              servico_id BIGINT,
                               data DATE,
                               hora TIME,
-                              UNIQUE(data, hora), -- Evita dois agendamentos no mesmo horário
+                              forma_pagamento VARCHAR(20),
+                              UNIQUE(data, hora),
                               CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
                               CONSTRAINT fk_servico FOREIGN KEY (servico_id) REFERENCES servicos(id)
 );
 
-select * from usuarios;
-select * from servicos;
 
+INSERT INTO categorias (nome, foto)
+VALUES ('Cabelereiro', 'foto_categoria.jpg');
 
-INSERT INTO servicos (nome, descricao, preco, foto)
-VALUES ('Corte de cabelo', 'Corte completo', 50.00, 'foto.jpg');
+INSERT INTO servicos (categoria_id, nome, descricao, preco, foto)
+VALUES (1, 'Corte de cabelo', 'Corte completo', 50.00, 'foto.jpg');
 
 INSERT INTO usuarios (nome, cpf, data_nascimento, telefone, genero, email, senha)
 VALUES (
@@ -68,5 +75,8 @@ VALUES (
            '123456'
        );
 
-select* from agendamentos;
-
+SELECT * FROM usuarios;
+SELECT * FROM servicos;
+SELECT * FROM produtos;
+SELECT * FROM agendamentos;
+select * from categorias;
