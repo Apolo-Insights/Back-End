@@ -23,6 +23,10 @@ public class Servico {
     private Double preco;
     private String foto;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
     public Servico(DadosCadastroServico dados) {
         this.nome = dados.nome();
         this.descricao = dados.descricao();

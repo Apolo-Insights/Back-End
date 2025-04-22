@@ -27,6 +27,8 @@ public class Agendamento {
     private Servico servico;
     private LocalDate data;
     private LocalTime hora;
+    @Enumerated(EnumType.STRING)
+    private FormaPagamento formaPagamento;
 
     public Agendamento(Usuario usuario, Servico servico, LocalDate data, LocalTime hora) {
         this.usuario = usuario;

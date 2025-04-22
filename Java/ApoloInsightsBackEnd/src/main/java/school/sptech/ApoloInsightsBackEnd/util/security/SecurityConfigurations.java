@@ -31,12 +31,11 @@ public class SecurityConfigurations {
                     .csrf(csrf -> csrf.disable())
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/login", "/usuarios").permitAll()
                             .anyRequest().authenticated()
                     )
                     .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-
-            return http.build();
         }
         http
                 .csrf(csrf -> csrf.disable())
