@@ -12,8 +12,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @RestControllerAdvice
-public class TratadorDeErros {
+public class
+TratadorDeErros {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -50,6 +53,29 @@ public class TratadorDeErros {
     @ExceptionHandler(Exception.class)
     public ResponseEntity tratarErro500(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " +ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(RequestError.class)
+    public ResponseEntity tratarErroRequest(RequestError ex) {
+        MsgErro msgErro = new MsgErro(ex.getCampo(), ex.getMensagem());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(msgErro);
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<MsgErro> duplicidadeDeCamposSQL(SQLIntegrityConstraintViolationException e) {
+
+        MsgErro msgErro = new MsgErro("erro", "Erro ao processar a requisição.");
+        if (e.getMessage().contains("usuarios.email")) {
+            msgErro = new MsgErro("email", "Email já registrado no sistema.");
+            return ResponseEntity.badRequest().body(msgErro);
+        }
+
+        if (e.getMessage().contains("usuarios.cpf")) {
+            msgErro = new MsgErro("cpf", "CPF já registrado no sistema.");
+            return ResponseEntity.badRequest().body(msgErro);
+        }
+
+        return ResponseEntity.status(500).body(msgErro);
     }
 
 

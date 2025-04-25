@@ -27,11 +27,12 @@ public class Servico {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    public Servico(DadosCadastroServico dados) {
+    public Servico(DadosCadastroServico dados, Categoria categoria) {
         this.nome = dados.nome();
         this.descricao = dados.descricao();
         this.preco = dados.preco();
         this.foto = dados.foto();
+        this.categoria = categoria;
     }
 
     public void atualizarInformacoes(DadosAtualizacaoServico dados) {

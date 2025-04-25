@@ -8,10 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosCadastroServico;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
+import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.ServicoRepository;
+import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
 
 @Service
 public class ServicoService {
@@ -19,10 +23,20 @@ public class ServicoService {
     @Autowired
     ServicoRepository repository;
 
+    @Autowired
+    CategoriaRepository categoriaRepository;
+
 
     @Transactional
-    public Servico cadastrar (Servico servico){
-        return repository.save(servico);
+    public Servico cadastrar (DadosCadastroServico dados){
+        if (repository.existsByNome(dados.nome())) {
+            throw new RequestError("nome","Serviço com esse nome já cadastrado");
+        }
+        Categoria categoria = categoriaRepository.findById(dados.idCategoria())
+                .orElseThrow(() -> new RequestError("categoria", "Categoria não encontrada"));
+
+
+        return repository.save(new Servico(dados, categoria));
     }
 
     @Transactional
@@ -46,5 +60,4 @@ public class ServicoService {
 
         repository.delete(servico);
     }
-
 }

@@ -11,7 +11,7 @@ public record ProdutoDetalhesDTO(
 ) {
     public ProdutoDetalhesDTO(Produto produto) {
         this(
-                produto.getId(),   // Inclua o ID do produto aqui
+                produto.getId(),
                 produto.getNome(),
                 produto.getDescricao(),
                 produto.getPreco(),

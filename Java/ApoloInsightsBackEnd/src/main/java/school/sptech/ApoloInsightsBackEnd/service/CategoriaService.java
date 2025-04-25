@@ -8,6 +8,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
+import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
 
 @Service
 public class CategoriaService {
@@ -16,6 +17,9 @@ public class CategoriaService {
     CategoriaRepository repository;
 
     public Categoria cadastrarCategoria(DadosCadastroCategoria dados) {
+        if (repository.existsByNome(dados.nome())) {
+            throw new RequestError("nome","Categoria com esse nome já cadastrada");
+        }
         return repository.save(new Categoria(dados));
     }
 

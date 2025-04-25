@@ -24,7 +24,7 @@ public class ServicoController {
 
     @PostMapping
     public ResponseEntity<DadosDetalhamentoServico> cadastrarServico(@Valid @RequestBody DadosCadastroServico dados) {
-        Servico servico = service.cadastrar(new Servico(dados));
+        Servico servico = service.cadastrar(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoServico(servico));
     }
 

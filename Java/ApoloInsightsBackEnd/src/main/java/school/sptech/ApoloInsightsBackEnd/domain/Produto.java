@@ -17,7 +17,8 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosCadastroProdut
 @NoArgsConstructor
 @Table(name = "produtos")
 @Entity(name = "Produto")
-public class Produto {
+public class
+Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

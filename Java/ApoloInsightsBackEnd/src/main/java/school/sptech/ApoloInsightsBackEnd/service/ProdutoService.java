@@ -10,15 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosAtualizacaoProduto;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosDetalhamentoProduto;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosListagemProduto;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.ProdutoDetalhesDTO;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.*;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.repository.ProdutoRepository;
+import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
 
 
 @Service
@@ -28,10 +26,12 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
 
-
     @Transactional
-    public Produto cadastrar (Produto produto){
-        return repository.save(produto);
+    public Produto cadastrar (DadosCadastroProduto dados){
+        if (repository.existsByNome(dados.nome())) {
+            throw new RequestError("nome","Produto com esse nome já cadastrado");
+        }
+        return repository.save(new Produto(dados));
     }
 
     @Transactional

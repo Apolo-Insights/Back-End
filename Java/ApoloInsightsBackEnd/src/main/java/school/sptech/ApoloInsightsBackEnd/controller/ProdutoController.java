@@ -21,7 +21,7 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<DadosDetalhamentoProduto> cadastrarProduto(@Valid @RequestBody DadosCadastroProduto dados) {
-        Produto produto = service.cadastrar(new Produto(dados));
+        Produto produto = service.cadastrar(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoProduto(produto));
     }
 
@@ -38,7 +38,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoDetalhesDTO> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<ProdutoDetalhesDTO> buscarPorId(@PathVariable Long id) {
         var detalhesProduto = service.buscarPorId(id);
         return ResponseEntity.ok(detalhesProduto);
     }
