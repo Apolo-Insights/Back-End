@@ -6,4 +6,5 @@ import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+    boolean existsByNome(String nome);
 }
