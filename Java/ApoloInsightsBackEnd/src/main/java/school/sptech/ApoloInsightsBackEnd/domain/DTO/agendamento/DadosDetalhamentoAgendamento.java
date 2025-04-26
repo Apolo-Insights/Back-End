@@ -19,8 +19,8 @@ public record DadosDetalhamentoAgendamento(
                 agendamento.getUsuario(),
                 agendamento.getServico(),
                 agendamento.getData(),
-                agendamento.getHora()),
-                agendamento.getFormaPagamento().toString();
+                agendamento.getHora(),
+                agendamento.getFormaPagamento().toString());
 
     }
 }
