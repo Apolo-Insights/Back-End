@@ -11,13 +11,16 @@ public record DadosDetalhamentoAgendamento(
         Usuario usuario,
         Servico servico,
         LocalDate data,
-        LocalTime hora
+        LocalTime hora,
+        String formaPagamento
 ) {
     public DadosDetalhamentoAgendamento(Agendamento agendamento) {
         this(
                 agendamento.getUsuario(),
                 agendamento.getServico(),
                 agendamento.getData(),
-                agendamento.getHora());
+                agendamento.getHora()),
+                agendamento.getFormaPagamento().toString();
+
     }
 }

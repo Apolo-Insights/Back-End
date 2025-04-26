@@ -30,10 +30,12 @@ public class  Agendamento {
     @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
 
-    public Agendamento(Usuario usuario, Servico servico, LocalDate data, LocalTime hora) {
+    public Agendamento(Usuario usuario, Servico servico, LocalDate data, LocalTime hora, FormaPagamento formaPagamento) {
         this.usuario = usuario;
         this.servico = servico;
         this.data = data;
         this.hora = hora;
+        this.formaPagamento = formaPagamento;
+
     }
 }

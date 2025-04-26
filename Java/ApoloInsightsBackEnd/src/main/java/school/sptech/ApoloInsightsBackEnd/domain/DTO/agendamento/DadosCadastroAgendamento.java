@@ -8,9 +8,9 @@ import java.time.LocalTime;
 
 public record DadosCadastroAgendamento(
         @NotNull(message = "Usuario não informado")
-        Long usuarioId,
+        Long idUsuario,
         @NotNull(message = "Serviço não informado")
-        Long servicoId,
+        Long idServico,
         @NotNull(message = "Data não informada")
         LocalDate data,
         @NotNull(message = "horário não informado")

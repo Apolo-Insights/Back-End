@@ -30,13 +30,13 @@ public class AgendamentoService {
 
     @Transactional
     public Agendamento agendar(DadosCadastroAgendamento dados) {
-        Usuario usuario = usuarioRepository.findById(dados.usuarioId())
+        Usuario usuario = usuarioRepository.findById(dados.idUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        Servico servico = servicoRepository.findById(dados.servicoId())
+        Servico servico = servicoRepository.findById(dados.idServico())
                 .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
 
-        Agendamento agendamento = new Agendamento(usuario, servico, dados.data(), dados.hora());
+        Agendamento agendamento = new Agendamento(usuario, servico, dados.data(), dados.hora(), dados.formaPagamento());
         return agendamentoRepository.save(agendamento);
     }
 
