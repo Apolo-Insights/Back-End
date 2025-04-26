@@ -34,9 +34,9 @@ public class ServicoController {
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoServico(servico));
     }
 
-    @GetMapping
-    public ResponseEntity<Page<DadosListagemServico>> listar(@PageableDefault(size = 6, sort = {"nome"}) Pageable paginacao) {
-        var page = service.listar(paginacao);
+    @GetMapping("/{id}")
+    public ResponseEntity<Page<DadosListagemServico>> listar(@PathVariable Long id,  @PageableDefault(size = 6, sort = {"nome"}) Pageable paginacao) {
+        var page = service.listar(id, paginacao);
         return ResponseEntity.ok(page);
     }
 
@@ -45,6 +45,4 @@ public class ServicoController {
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Livro deletado com sucesso!");
     }
-
-
 }

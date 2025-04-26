@@ -19,31 +19,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurations {
     @Value("${jwt.ligado}")
-    private Boolean jwtLigado;
+    private Boolean jwtLigado = true;
 
     @Autowired
     private SecurityFilter securityFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        if (jwtLigado) {
-            http
-                    .csrf(csrf -> csrf.disable())
-                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/login", "/usuarios").permitAll()
-                            .anyRequest().authenticated()
-                    )
-                    .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-        }
         http
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login", "/usuario").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

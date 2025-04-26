@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,37 +25,19 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository repository;
-
-    @Autowired
     private UserDetailsService userDetailsService;
-
-    @Value("${jwt.ligado}")
-    private Boolean jwtLigado;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (jwtLigado) {
-            String tokenJWT = recuperarToken(request);
+        String tokenJWT = recuperarToken(request);
 
-            if (tokenJWT != null) {
-                try {
-                    String subject = tokenService.getSubject(tokenJWT);
-                    UserDetails usuario = userDetailsService.loadUserByUsername(subject);
+        if (tokenJWT != null) {
+            String subject = tokenService.getSubject(tokenJWT);
+            UserDetails usuario = userDetailsService.loadUserByUsername(subject);
 
-                    if (usuario != null) {
-                        var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                } catch (Exception e) {
-                    SecurityContextHolder.clearContext();
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                }
-            } else {
-                SecurityContextHolder.clearContext();
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+            if (usuario != null) {
+                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
@@ -66,5 +50,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             return authorizationHeader.replace("Bearer ", "");
         }
         return null;
+    }
+
+    private void handleUnauthorized(HttpServletResponse response, String errorMessage) throws IOException {
+        SecurityContextHolder.clearContext();
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Unauthorized: " + errorMessage);
     }
 }

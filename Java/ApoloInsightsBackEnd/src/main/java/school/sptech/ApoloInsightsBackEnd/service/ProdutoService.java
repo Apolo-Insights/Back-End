@@ -29,7 +29,8 @@ public class ProdutoService {
     @Transactional
     public Produto cadastrar (DadosCadastroProduto dados){
         if (repository.existsByNome(dados.nome())) {
-            throw new RequestError("nome","Produto com esse nome já cadastrado");
+            throw new RequestError(
+                    HttpStatus.CONFLICT,"nome","Produto com esse nome já cadastrado");
         }
         return repository.save(new Produto(dados));
     }
@@ -37,7 +38,7 @@ public class ProdutoService {
     @Transactional
     public Produto atualizar (DadosAtualizacaoProduto dados){
         Produto produto = repository.findById(dados.id())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
         produto.atualizarInformacoes(dados);
         return repository.save(produto);
     }

@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
@@ -17,22 +17,25 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
+    private static final String ISSUER = "API Apolo Insights";
+    private static final String TOKEN_ERROR = "Token JWT inválido ou expirado!";
+    private static final String GENERATION_ERROR = "ERRO AO GERAR O TOKEN JWT";
+
     @Value("${api.security.token.secret}")
     private String secret;
 
+    @Value("${api.security.token.expiration-time}")
+    private Integer expirationTime;
+
     public String gerarToken(Usuario usuario){
         try {
-            var algoritmo = Algorithm.HMAC256(secret);
+            var algoritimo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API Apolo Insights")
-                    .withSubject(String.valueOf(usuario.getId())) // ID como subject
-                    .withClaim("id", usuario.getId()) // ID também como claim
-                    .withClaim("email", usuario.getEmail())
-                    .withClaim("nome", usuario.getNome())
-                    .withClaim("cpf", usuario.getCpf())
-                    .withClaim("telefone", usuario.getTelefone())
+                    .withSubject(usuario.getEmail())
                     .withExpiresAt(dataExpiracao())
-                    .sign(algoritmo);
+                    .sign(algoritimo);
         } catch (JWTCreationException exception){
             throw new RuntimeException("ERRO AO GERAR O TOKEN JWT", exception);
         }
@@ -51,22 +54,14 @@ public class TokenService {
         }
     }
 
-    public String getNome(String tokenJWT) {
-        try {
-            var algoritmo = Algorithm.HMAC256(secret);
-            DecodedJWT decodedJWT = JWT.require(algoritmo)
-                    .withIssuer("API Apolo Insights")
-                    .build()
-                    .verify(tokenJWT);
+    private Instant dataExpiracao() {
+        return LocalDateTime.now().plusHours(expirationTime).toInstant(ZoneOffset.of("-03:00"));
+    }
 
-            return decodedJWT.getClaim("nome").asString();
-        } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token JWT inválido ou expirado!", exception);
+    private void validarSecret() {
+        if (secret == null || secret.isBlank()) {
+            logger.error("O segredo do token JWT não foi configurado!");
+            throw new IllegalStateException("O segredo do token JWT não foi configurado!");
         }
     }
-
-    private Instant dataExpiracao() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-    }
 }
-

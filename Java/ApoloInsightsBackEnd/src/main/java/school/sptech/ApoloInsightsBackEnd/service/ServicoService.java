@@ -30,11 +30,11 @@ public class ServicoService {
     @Transactional
     public Servico cadastrar (DadosCadastroServico dados){
         if (repository.existsByNome(dados.nome())) {
-            throw new RequestError("nome","Serviço com esse nome já cadastrado");
+            throw new RequestError(HttpStatus.CONFLICT,"nome","Serviço com esse nome já cadastrado");
         }
         Categoria categoria = categoriaRepository.findById(dados.idCategoria())
-                .orElseThrow(() -> new RequestError("categoria", "Categoria não encontrada"));
-
+                .orElseThrow(() -> new RequestError(
+                        HttpStatus.NOT_FOUND, "categoria", "Categoria não encontrada"));
 
         return repository.save(new Servico(dados, categoria));
     }
@@ -47,9 +47,10 @@ public class ServicoService {
         return repository.save(servico);
     }
 
-    public Page<DadosListagemServico> listar(Pageable paginacao){
-        if (repository.findAll().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum serviço encontrado");
+    public Page<DadosListagemServico> listar(Long id, Pageable paginacao){
+        if (repository.findByCategoriaId(id, paginacao).isEmpty()) {
+            throw new RequestError(
+                    HttpStatus.NOT_FOUND, "sem campo", "Nenhum Serviço encontrado na Categoria");
         }
         return repository.findAll(paginacao).map(DadosListagemServico::new);
     }

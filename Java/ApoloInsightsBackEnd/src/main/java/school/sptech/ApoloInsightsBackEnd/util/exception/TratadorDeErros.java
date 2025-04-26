@@ -58,7 +58,7 @@ TratadorDeErros {
     @ExceptionHandler(RequestError.class)
     public ResponseEntity tratarErroRequest(RequestError ex) {
         MsgErro msgErro = new MsgErro(ex.getCampo(), ex.getMensagem());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(msgErro);
+        return ResponseEntity.status(ex.getStatus()).body(msgErro);
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
