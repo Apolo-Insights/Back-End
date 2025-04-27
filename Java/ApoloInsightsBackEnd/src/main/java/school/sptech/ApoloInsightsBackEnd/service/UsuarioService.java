@@ -9,8 +9,8 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsu
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
-import school.sptech.ApoloInsightsBackEnd.util.security.SenhaUtil;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.security.SenhaUtil;
 
 @Service
 public class UsuarioService {

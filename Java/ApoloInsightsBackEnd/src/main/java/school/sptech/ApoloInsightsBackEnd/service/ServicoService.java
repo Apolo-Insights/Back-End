@@ -15,7 +15,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServic
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.ServicoRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 
 @Service
 public class ServicoService {

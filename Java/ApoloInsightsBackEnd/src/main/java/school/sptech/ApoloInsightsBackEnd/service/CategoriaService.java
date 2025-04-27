@@ -9,9 +9,8 @@ import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
-import school.sptech.ApoloInsightsBackEnd.domain.Produto;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 
 @Service
 public class CategoriaService {

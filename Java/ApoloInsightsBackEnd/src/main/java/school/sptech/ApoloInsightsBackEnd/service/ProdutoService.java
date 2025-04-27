@@ -1,8 +1,6 @@
 package school.sptech.ApoloInsightsBackEnd.service;
 
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,12 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.*;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
-import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.repository.ProdutoRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 
 
 @Service

@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.util.security;
+package school.sptech.ApoloInsightsBackEnd.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

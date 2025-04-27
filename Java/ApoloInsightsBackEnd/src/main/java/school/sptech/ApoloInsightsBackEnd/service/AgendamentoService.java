@@ -12,7 +12,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.AgendamentoRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.ServicoRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 import java.util.List;
 
 @Service
