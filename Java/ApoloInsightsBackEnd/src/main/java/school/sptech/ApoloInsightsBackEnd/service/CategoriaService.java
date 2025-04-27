@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
@@ -29,5 +30,9 @@ public class CategoriaService {
             throw new RuntimeException("Nenhuma categoria encontrada");
         }
         return repository.findAll(paginacao).map(DadosListagemCategoria::new);
+    }
+
+    public Object atualizarCategoria(DadosAtualizacaoCategoria dados) {
+        return null;
     }
 }

@@ -20,7 +20,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<DadosDetalhamentoUsuario> cadastrar(@Valid @RequestBody DadosCadastroUsuario dados){
-        Usuario usuario = service.cadastrar(new Usuario(dados));
+        Usuario usuario = service.cadastrar(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoUsuario(usuario));
     }
 
