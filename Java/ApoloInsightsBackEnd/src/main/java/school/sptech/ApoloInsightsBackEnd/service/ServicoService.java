@@ -40,8 +40,8 @@ public class ServicoService {
     }
 
     @Transactional
-    public Servico atualizar (DadosAtualizacaoServico dados){
-        Servico servico = repository.findById(dados.id())
+    public Servico atualizar (Long id, DadosAtualizacaoServico dados){
+        Servico servico = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado"));
         servico.atualizarInformacoes(dados);
         return repository.save(servico);

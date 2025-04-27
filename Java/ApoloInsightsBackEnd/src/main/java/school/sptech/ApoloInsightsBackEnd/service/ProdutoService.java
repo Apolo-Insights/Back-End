@@ -36,8 +36,8 @@ public class ProdutoService {
     }
 
     @Transactional
-    public Produto atualizar (DadosAtualizacaoProduto dados){
-        Produto produto = repository.findById(dados.id())
+    public Produto atualizar (Long id, DadosAtualizacaoProduto dados){
+        Produto produto = repository.findById(id)
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
         produto.atualizarInformacoes(dados);
         return repository.save(produto);
@@ -45,7 +45,7 @@ public class ProdutoService {
 
     public Page<DadosListagemProduto> listar(Pageable paginacao){
         if (repository.findAll().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum Produto encontrado");
+            throw new RequestError(HttpStatus.NOT_FOUND,"sem campo", "Nenhum Produto encontrado");
         }
         return repository.findAll(paginacao).map(DadosListagemProduto::new);
     }
@@ -58,7 +58,7 @@ public class ProdutoService {
 
     public void deletar(Long id){
         Produto servico = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
 
         repository.delete(servico);
     }

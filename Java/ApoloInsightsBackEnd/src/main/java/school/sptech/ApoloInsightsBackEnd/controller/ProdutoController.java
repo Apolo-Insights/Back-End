@@ -25,9 +25,11 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoProduto(produto));
     }
 
-    @PutMapping
-    public ResponseEntity<DadosDetalhamentoProduto> atualizarProduto(@Valid @RequestBody DadosAtualizacaoProduto dados) {
-        Produto produto = service.atualizar(dados);
+    @PutMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoProduto> atualizarProduto(
+            @Valid @RequestBody DadosAtualizacaoProduto dados,
+            @PathVariable Long id) {
+        Produto produto = service.atualizar(id, dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoProduto(produto));
     }
 

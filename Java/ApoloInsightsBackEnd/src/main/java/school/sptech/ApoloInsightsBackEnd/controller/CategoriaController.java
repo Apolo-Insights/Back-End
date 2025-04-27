@@ -23,21 +23,31 @@ public class CategoriaController {
     CategoriaService service;
 
     @PostMapping
-    public ResponseEntity<DadosDetalhamentoCategoria> cadastrarCategoria(@Valid @RequestBody DadosCadastroCategoria dados) {
+    public ResponseEntity<DadosDetalhamentoCategoria> cadastrarCategoria(
+            @Valid @RequestBody DadosCadastroCategoria dados) {
         var categoria = service.cadastrarCategoria(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoCategoria(categoria));
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemCategoria>> listarCategorias(@PageableDefault(size = 3, sort = {"nome"}) Pageable paginacao) {
+    public ResponseEntity<Page<DadosListagemCategoria>> listarCategorias(
+            @PageableDefault(size = 3, sort = {"nome"}) Pageable paginacao) {
         var categorias = service.listarCategorias(paginacao);
         return ResponseEntity.ok(categorias);
     }
 
-    @PutMapping
-    public ResponseEntity<DadosDetalhamentoCategoria> atualizarCategoria(@RequestBody DadosAtualizacaoCategoria dados) {
-        var categoria = service.atualizarCategoria(dados);
+    @PutMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoCategoria> atualizarCategoria(
+            @RequestBody DadosAtualizacaoCategoria dados,
+            @PathVariable Long id) {
+        var categoria = service.atualizarCategoria(id, dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategoria(categoria));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarCategoria(@PathVariable Long id) {
+        service.deletarCategoria(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Categoria com id %d deletada com sucesso!".formatted(id));
     }
 
 
