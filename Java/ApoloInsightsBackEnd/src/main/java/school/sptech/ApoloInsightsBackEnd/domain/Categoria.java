@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 
 @Entity
@@ -23,5 +24,10 @@ public class Categoria {
     public Categoria(DadosCadastroCategoria dados) {
         this.nome = dados.nome();
         this.foto = dados.foto();
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoCategoria dados) {
+        if (dados.nome() != null) this.nome = dados.nome();
+        if (dados.foto() != null) this.foto = dados.foto();
     }
 }

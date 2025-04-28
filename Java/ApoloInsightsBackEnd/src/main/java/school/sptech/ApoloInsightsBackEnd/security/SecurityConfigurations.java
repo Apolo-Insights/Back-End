@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.util.security;
+package school.sptech.ApoloInsightsBackEnd.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

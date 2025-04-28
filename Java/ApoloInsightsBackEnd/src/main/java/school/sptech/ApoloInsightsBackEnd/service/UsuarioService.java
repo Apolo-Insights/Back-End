@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
-import school.sptech.ApoloInsightsBackEnd.util.security.SenhaUtil;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.security.SenhaUtil;
 
 @Service
 public class UsuarioService {
@@ -17,7 +19,17 @@ public class UsuarioService {
     UsuarioRepository repository;
 
     @Transactional
-    public Usuario cadastrar(Usuario usuario){
+    public Usuario cadastrar(DadosCadastroUsuario dados){
+        if (repository.existsByEmail(dados.email())) {
+            throw new RequestError(
+                    HttpStatus.CONFLICT, "email", "Esse E-mail já está cadastrado");
+        }
+        if (repository.existsByCpf(dados.cpf())) {
+            throw new RequestError(
+                    HttpStatus.CONFLICT, "cpf", "Esse CPF já está cadastrado");
+        }
+
+        Usuario usuario = new Usuario(dados);
         usuario.setSenha(SenhaUtil.hashSenha(usuario.getSenha()));
         return repository.save(usuario);
     }

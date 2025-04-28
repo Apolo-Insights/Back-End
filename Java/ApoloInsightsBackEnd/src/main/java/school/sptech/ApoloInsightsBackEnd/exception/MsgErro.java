@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.util.exception;
+package school.sptech.ApoloInsightsBackEnd.exception;
 
 public record MsgErro(
         String campo,

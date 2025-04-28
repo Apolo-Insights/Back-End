@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.util.security;
+package school.sptech.ApoloInsightsBackEnd.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -58,10 +57,4 @@ public class TokenService {
         return LocalDateTime.now().plusHours(expirationTime).toInstant(ZoneOffset.of("-03:00"));
     }
 
-    private void validarSecret() {
-        if (secret == null || secret.isBlank()) {
-            logger.error("O segredo do token JWT não foi configurado!");
-            throw new IllegalStateException("O segredo do token JWT não foi configurado!");
-        }
-    }
 }

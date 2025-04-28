@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.util.security;
+package school.sptech.ApoloInsightsBackEnd.security;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 

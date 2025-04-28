@@ -1,8 +1,6 @@
 package school.sptech.ApoloInsightsBackEnd.service;
 
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,12 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.*;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
-import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.repository.ProdutoRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 
 
 @Service
@@ -36,8 +31,8 @@ public class ProdutoService {
     }
 
     @Transactional
-    public Produto atualizar (DadosAtualizacaoProduto dados){
-        Produto produto = repository.findById(dados.id())
+    public Produto atualizar (Long id, DadosAtualizacaoProduto dados){
+        Produto produto = repository.findById(id)
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
         produto.atualizarInformacoes(dados);
         return repository.save(produto);
@@ -45,7 +40,7 @@ public class ProdutoService {
 
     public Page<DadosListagemProduto> listar(Pageable paginacao){
         if (repository.findAll().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum Produto encontrado");
+            throw new RequestError(HttpStatus.NOT_FOUND,"sem campo", "Nenhum Produto encontrado");
         }
         return repository.findAll(paginacao).map(DadosListagemProduto::new);
     }
@@ -58,7 +53,7 @@ public class ProdutoService {
 
     public void deletar(Long id){
         Produto servico = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
 
         repository.delete(servico);
     }

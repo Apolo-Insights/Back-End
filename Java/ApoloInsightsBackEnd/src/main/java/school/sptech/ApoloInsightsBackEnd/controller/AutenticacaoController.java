@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosLogin;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
-import school.sptech.ApoloInsightsBackEnd.util.security.DadosTokenJWT;
-import school.sptech.ApoloInsightsBackEnd.util.security.SenhaUtil;
-import school.sptech.ApoloInsightsBackEnd.util.security.TokenService;
-
+import school.sptech.ApoloInsightsBackEnd.security.DadosTokenJWT;
+import school.sptech.ApoloInsightsBackEnd.security.SenhaUtil;
+import school.sptech.ApoloInsightsBackEnd.security.TokenService;
 import java.util.Optional;
 
 @CrossOrigin(origins = "${cors.allowed.origin}")

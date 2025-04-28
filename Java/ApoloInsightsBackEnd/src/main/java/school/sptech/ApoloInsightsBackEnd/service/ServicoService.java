@@ -15,7 +15,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServic
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.ServicoRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 
 @Service
 public class ServicoService {
@@ -40,8 +40,8 @@ public class ServicoService {
     }
 
     @Transactional
-    public Servico atualizar (DadosAtualizacaoServico dados){
-        Servico servico = repository.findById(dados.id())
+    public Servico atualizar (Long id, DadosAtualizacaoServico dados){
+        Servico servico = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado"));
         servico.atualizarInformacoes(dados);
         return repository.save(servico);

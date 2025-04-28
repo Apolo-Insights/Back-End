@@ -6,10 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
-import school.sptech.ApoloInsightsBackEnd.util.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 
 @Service
 public class CategoriaService {
@@ -26,8 +27,23 @@ public class CategoriaService {
 
     public Page<DadosListagemCategoria> listarCategorias(Pageable paginacao) {
         if (repository.findAll().isEmpty()) {
-            throw new RuntimeException("Nenhuma categoria encontrada");
+            throw new RequestError(HttpStatus.NOT_FOUND,"sem campo","Nenhuma categoria encontrada");
         }
         return repository.findAll(paginacao).map(DadosListagemCategoria::new);
+    }
+
+    public Categoria atualizarCategoria(Long id, DadosAtualizacaoCategoria dados) {
+        Categoria categoria = repository.findById(id)
+                .orElseThrow(() -> new RequestError(
+                        HttpStatus.CONFLICT,"nome","Categoria com esse nome já cadastrada"));
+
+        categoria.atualizarInformacoes(dados);
+        return null;
+    }
+
+    public void deletarCategoria(Long id) {
+        Categoria categoria = repository.findById(id)
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idCategoria", "Categoria não encontrada"));
+        repository.delete(categoria);
     }
 }

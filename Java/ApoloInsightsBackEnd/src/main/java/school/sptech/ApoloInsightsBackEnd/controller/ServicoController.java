@@ -28,9 +28,11 @@ public class ServicoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoServico(servico));
     }
 
-    @PutMapping
-    public ResponseEntity<DadosDetalhamentoServico> atualizarServico(@Valid @RequestBody DadosAtualizacaoServico dados) {
-        Servico servico = service.atualizar(dados);
+    @PutMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoServico> atualizarServico(
+            @Valid @RequestBody DadosAtualizacaoServico dados,
+            @PathVariable Long id) {
+        Servico servico = service.atualizar(id, dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoServico(servico));
     }
 
