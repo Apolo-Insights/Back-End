@@ -52,7 +52,7 @@ public class ServicoService {
             throw new RequestError(
                     HttpStatus.NOT_FOUND, "sem campo", "Nenhum Serviço encontrado na Categoria");
         }
-        return repository.findAll(paginacao).map(DadosListagemServico::new);
+        return repository.findByCategoriaId(id ,paginacao).map(DadosListagemServico::new);
     }
 
     public void deletar(Long id){
