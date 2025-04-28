@@ -37,35 +37,12 @@ public class ServicoController {
     }
 
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<Page<DadosListagemServico>> listar(@PathVariable Long id,  @PageableDefault(size = 6, sort = {"nome"}) Pageable paginacao) {
         var page = service.listar(id, paginacao);
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<DadosListagemServico>> listarT(Pageable pageable){
-        var listaTudo = service.listarTodos(pageable);
-        return ResponseEntity.ok(listaTudo);
-    }
-
-    @GetMapping("/category")
-    public ResponseEntity<Page<DadosListagemServico>> listarServicosPorCategoria(
-            @RequestParam(required = false) Long categoryId,
-            Pageable pageable) {
-
-        Page<DadosListagemServico> listaServico;
-
-        if (categoryId != null) {
-            listaServico = service.listarPorCategoria(categoryId, pageable);
-        } else {
-            listaServico = service.listarTodos(pageable);
-        }
-
-        return ResponseEntity.ok(listaServico);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {
