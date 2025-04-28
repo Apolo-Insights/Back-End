@@ -33,12 +33,17 @@ public class CategoriaService {
     }
 
     public Categoria atualizarCategoria(Long id, DadosAtualizacaoCategoria dados) {
+
+        if (repository.existsByNome(dados.nome())) {
+            throw new RequestError(HttpStatus.CONFLICT,"nome","Categoria com esse nome já cadastrada");
+        }
+
         Categoria categoria = repository.findById(id)
                 .orElseThrow(() -> new RequestError(
                         HttpStatus.CONFLICT,"nome","Categoria com esse nome já cadastrada"));
 
         categoria.atualizarInformacoes(dados);
-        return null;
+        return repository.save(categoria);
     }
 
     public void deletarCategoria(Long id) {

@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosDetalhamentoCategoria;
@@ -40,7 +41,7 @@ public class CategoriaController {
     public ResponseEntity<DadosDetalhamentoCategoria> atualizarCategoria(
             @RequestBody DadosAtualizacaoCategoria dados,
             @PathVariable Long id) {
-        var categoria = service.atualizarCategoria(id, dados);
+        Categoria categoria = service.atualizarCategoria(id, dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategoria(categoria));
     }
 
