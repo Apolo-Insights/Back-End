@@ -37,9 +37,9 @@ public class ServicoController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Page<DadosListagemServico>> listar(@PathVariable Long id,  @PageableDefault(size = 6, sort = {"nome"}) Pageable paginacao) {
-        var page = service.listar(id, paginacao);
+    @GetMapping("/{idCategoria}")
+    public ResponseEntity<Page<DadosListagemServico>> listar(@PathVariable Long idCategoria,  @PageableDefault(size = 6, sort = {"nome"}) Pageable paginacao) {
+        var page = service.listar(idCategoria, paginacao);
         return ResponseEntity.ok(page);
     }
 
