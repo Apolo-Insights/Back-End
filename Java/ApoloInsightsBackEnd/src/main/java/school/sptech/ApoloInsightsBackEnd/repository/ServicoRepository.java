@@ -9,5 +9,6 @@ import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 @Repository
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
     boolean existsByNome(String nome);
+
     Page<Servico> findByCategoriaId(Long categoriaId, Pageable pageable);
 }

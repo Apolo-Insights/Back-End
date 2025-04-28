@@ -55,6 +55,18 @@ public class ServicoService {
         return repository.findAll(paginacao).map(DadosListagemServico::new);
     }
 
+    public Page<DadosListagemServico> listarTodos(Pageable paginacao) {
+        Page<Servico> servicos = repository.findAll(paginacao);
+        if (servicos.isEmpty()) {
+            throw new RequestError(
+                    HttpStatus.NOT_FOUND, "sem campo", "Nenhum Serviço encontrado");
+        }
+        return servicos.map(DadosListagemServico::new);
+    }
+
+    public Page<DadosListagemServico> listarPorCategoria(Long categoryId, Pageable pageable) {
+        return repository.findByCategoriaId(categoryId, pageable).map(DadosListagemServico::new);
+    }
     public void deletar(Long id){
         Servico servico = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Serviço não encontrado"));

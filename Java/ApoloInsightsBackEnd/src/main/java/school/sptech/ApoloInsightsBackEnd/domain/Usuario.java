@@ -47,10 +47,19 @@ public class Usuario implements UserDetails {
         this.senha = dados.senha();
     }
 
-    public void atualizarInformacoes(DadosAtualizacaoUsuario dados){
-        if (dados.nome() != null) this.nome = dados.nome();
-        if (dados.telefone() != null) this.telefone = dados.telefone();
-        if (dados.email() != null) this.email = dados.email();
+    public void atualizarInformacoes(DadosAtualizacaoUsuario dados) {
+        if (dados.nome() != null) {
+            this.nome = dados.nome();
+        }
+        if (dados.telefone() != null) {
+            this.telefone = dados.telefone();
+        }
+        if (dados.email() != null) {
+            this.email = dados.email();
+        }
+        if (dados.genero() != null) {
+            this.genero = dados.genero();
+        }
     }
 
     @Override

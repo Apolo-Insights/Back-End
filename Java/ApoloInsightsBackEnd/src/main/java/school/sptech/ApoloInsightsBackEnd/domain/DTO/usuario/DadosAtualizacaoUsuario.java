@@ -1,6 +1,7 @@
 package school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario;
 
 import jakarta.validation.constraints.NotNull;
+import school.sptech.ApoloInsightsBackEnd.domain.Genero;
 
 public record DadosAtualizacaoUsuario(
         @NotNull
@@ -10,6 +11,7 @@ public record DadosAtualizacaoUsuario(
 
         String telefone,
 
-        String email
+        String email,
+        Genero genero
 ) {
 }
