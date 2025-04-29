@@ -1,5 +1,6 @@
 package school.sptech.ApoloInsightsBackEnd.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosDetalhamentoUs
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
 
+@Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -19,26 +21,25 @@ public class UsuarioController {
     UsuarioService service;
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.Operation(summary = "Cadastrar usuário", description = "Cadastra um novo usuário no sistema")
     public ResponseEntity<DadosDetalhamentoUsuario> cadastrar(@Valid @RequestBody DadosCadastroUsuario dados){
         Usuario usuario = service.cadastrar(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoUsuario(usuario));
     }
 
     @PutMapping
+    @io.swagger.v3.oas.annotations.Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
     public ResponseEntity<DadosDetalhamentoUsuario> atualizar(@Valid @RequestBody DadosAtualizacaoUsuario dados){
         Usuario usuario = service.atualizar(dados);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
     }
 
-//    @GetMapping
-//    public ResponseEntity<DadosListagemUsuario> listar(){
-//        return ResponseEntity.ok(new DadosListagemUsuario(service.listar()));
-//    }
-
     @DeleteMapping("/{id}")
+    @io.swagger.v3.oas.annotations.Operation(summary = "Deletar usuário", description = "Remove um usuário do sistema pelo ID")
     public ResponseEntity<String> deletar(@PathVariable Long id){
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
     }
-
 }
+
+
