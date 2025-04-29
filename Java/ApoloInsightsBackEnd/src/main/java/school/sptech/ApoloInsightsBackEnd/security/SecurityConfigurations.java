@@ -34,7 +34,10 @@ public class SecurityConfigurations {
                                 "/usuarios").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/servicos/*",
+                                "/servicos",
                                 "/produtos/*",
+                                "/produtos",
+                                "/categorias",
                                 "/categorias/*").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
