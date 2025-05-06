@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +35,8 @@ public class Usuario implements UserDetails {
     private Genero genero;
     private String email;
     private String senha;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public Usuario(DadosCadastroUsuario dados) {
         this.nome = dados.nome();
@@ -45,6 +46,7 @@ public class Usuario implements UserDetails {
         this.telefone = dados.telefone();
         this.email = dados.email();
         this.senha = dados.senha();
+        this.role = Role.CLIENTE;
     }
 
     public void atualizarInformacoes(DadosAtualizacaoUsuario dados) {

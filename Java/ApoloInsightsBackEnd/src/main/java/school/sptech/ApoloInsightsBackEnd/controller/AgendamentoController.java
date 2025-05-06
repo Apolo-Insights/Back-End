@@ -24,9 +24,11 @@ public class AgendamentoController {
         return ResponseEntity.ok(new DadosDetalhamentoAgendamento(agendamento));
     }
 
-    @GetMapping
-    public ResponseEntity<List<DadosHistoricoAgendamento>> listarHistoricoServicos() {
-        var agendamentos = service.listarHistoricoServicos();
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<List<DadosHistoricoAgendamento>> listarHistoricoServicos(
+            @PathVariable Long idUsuario
+    ) {
+        var agendamentos = service.listarHistoricoServicos(idUsuario);
         return ResponseEntity.ok(agendamentos);
     }
 }

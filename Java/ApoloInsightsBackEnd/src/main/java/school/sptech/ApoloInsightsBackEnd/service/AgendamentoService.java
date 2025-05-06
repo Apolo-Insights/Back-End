@@ -39,10 +39,10 @@ public class AgendamentoService {
         return agendamentoRepository.save(agendamento);
     }
 
-    public List<DadosHistoricoAgendamento> listarHistoricoServicos() {
-        if (agendamentoRepository.findAll().isEmpty()) {
+    public List<DadosHistoricoAgendamento> listarHistoricoServicos(Long idUsuario) {
+        if (agendamentoRepository.findByUsuarioId(idUsuario).isEmpty()) {
             throw new RequestError(HttpStatus.NOT_FOUND, "sem campo", "Nenhum agendamento de serviço encontrado");
         }
-        return agendamentoRepository.findAll().stream().map(DadosHistoricoAgendamento::new).toList();
+        return agendamentoRepository.findByUsuarioId(idUsuario).stream().map(DadosHistoricoAgendamento::new).toList();
     }
 }

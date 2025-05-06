@@ -18,7 +18,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "${cors.allowed.origin}")
 @RestController
 @RequestMapping("/login")
-public class AutenticacaoController {
+public class   AutenticacaoController {
 
     @Autowired
     private AuthenticationManager manager;
