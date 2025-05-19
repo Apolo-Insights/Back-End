@@ -7,6 +7,12 @@ import lombok.*;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosCadastroServico;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import static school.sptech.ApoloInsightsBackEnd.util.DataHoraUtil.formatter;
+
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +28,7 @@ public class Servico {
     private String descricao;
     private Double preco;
     private String foto;
+    private Duration duracao;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -33,6 +40,10 @@ public class Servico {
         this.preco = dados.preco();
         this.foto = dados.foto();
         this.categoria = categoria;
+        // Espera uma string no formato HH:mm (ex: "01:30")
+
+        LocalTime tempo = LocalTime.parse(dados.duracao(), formatter);
+        this.duracao = Duration.between(LocalTime.MIN, tempo);
     }
 
     public void atualizarInformacoes(DadosAtualizacaoServico dados) {
@@ -40,6 +51,11 @@ public class Servico {
         if (dados.descricao() != null) this.descricao = dados.descricao();
         if (dados.preco() != null) this.preco = dados.preco();
         if (dados.foto() != null) this.foto = dados.foto();
+        if (dados.duracao() != null) {
+            // Espera uma string no formato HH:mm (ex: "01:30")
+            LocalTime tempo = LocalTime.parse(dados.duracao(), formatter);
+            this.duracao = Duration.between(LocalTime.MIN, tempo);
+        }
     }
 
 

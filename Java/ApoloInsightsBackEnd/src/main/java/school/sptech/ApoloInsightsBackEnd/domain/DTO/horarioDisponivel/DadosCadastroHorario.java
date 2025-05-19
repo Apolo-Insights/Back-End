@@ -1,10 +1,17 @@
 package school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel;
 
-
-import java.util.List;
+import java.time.LocalTime;
 
 public record DadosCadastroHorario(
-        Long servicoId,
-        List<DiasDisponiveis> diasDisponiveis
+        Long idCategoria,
+        boolean domingo,
+        boolean segunda,
+        boolean terca,
+        boolean quarta,
+        boolean quinta,
+        boolean sexta,
+        boolean sabado,
+        LocalTime horaInicio,
+        LocalTime horaFim
 ) {
 }

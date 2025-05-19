@@ -15,6 +15,8 @@ public record DadosCadastroServico(
         @NotNull(message = "O preço do Serviço não foi inserido")
         Double preco,
 
-        String foto
+        String foto,
+        @NotBlank(message = "A duração do Serviço não foi inserida")
+        String duracao
 ) {
 }

@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosDetalhamentoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.Role;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
+import java.util.List;
 
 @Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @RestController
@@ -40,6 +42,19 @@ public class UsuarioController {
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
     }
+
+//    @PutMapping("/admin/{idUsuario}")
+//    public ResponseEntity<DadosDetalhamentoUsuario> atualizarAdmin(@PathVariable Long idUsuario, @RequestParam Role role) {
+//        var usuario = service.atualizarAdmin(idUsuario, role);
+//        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
+//    }
+
+    @GetMapping("/admin")
+    public ResponseEntity <List<DadosDetalhamentoUsuario>> listarUsuarios() {
+        List<DadosDetalhamentoUsuario> usuarios = service.listarUsuarios();
+        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+    }
+
 }
 
 

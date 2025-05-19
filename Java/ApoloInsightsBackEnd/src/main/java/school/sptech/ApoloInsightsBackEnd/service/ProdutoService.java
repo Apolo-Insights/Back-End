@@ -57,4 +57,21 @@ public class ProdutoService {
 
         repository.delete(servico);
     }
+
+    public void adicionarEstoque(Long id) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
+        produto.adicionarEstoque();
+        repository.save(produto);
+    }
+
+    public void removerEstoque(Long id) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"idProduto", "Produto não encontrado"));
+        if (produto.getEstoque() == 0) {
+            throw new RequestError(HttpStatus.BAD_REQUEST,"estoque","Produto sem estoque");
+        }
+        produto.removerEstoque();
+        repository.save(produto);
+    }
 }

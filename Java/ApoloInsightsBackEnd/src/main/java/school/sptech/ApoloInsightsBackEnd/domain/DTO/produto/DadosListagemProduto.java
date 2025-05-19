@@ -13,7 +13,8 @@ public record DadosListagemProduto(
         String descricao,
         @NotNull(message = "O preço do produto não foi inserido")
         Double preco,
-        String foto
+        String foto,
+        Integer estoque
 ) {
         public DadosListagemProduto(Produto produto){
                 this(
@@ -21,6 +22,7 @@ public record DadosListagemProduto(
                         produto.getNome(),
                         produto.getDescricao(),
                         produto.getPreco(),
-                        produto.getFoto());
+                        produto.getFoto(),
+                        produto.getEstoque());
         }
 }

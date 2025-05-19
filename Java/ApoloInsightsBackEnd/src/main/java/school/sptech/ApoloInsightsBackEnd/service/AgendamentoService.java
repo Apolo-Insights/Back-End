@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.ApoloInsightsBackEnd.domain.Agendamento;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamento;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamentoAdmin;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosHistoricoAgendamento;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
@@ -36,6 +37,18 @@ public class AgendamentoService {
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "servico", "Serviço não encontrado"));
 
         Agendamento agendamento = new Agendamento(usuario, servico, dados.data(), dados.hora(), dados.formaPagamento());
+        return agendamentoRepository.save(agendamento);
+    }
+
+    @Transactional
+    public Agendamento agendar(DadosCadastroAgendamentoAdmin dados) {
+        Usuario usuario = usuarioRepository.findById(dados.idUsuario())
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "usuario", "Usuário não encontrado"));
+
+        Servico servico = servicoRepository.findById(dados.idServico())
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "servico", "Serviço não encontrado"));
+
+        Agendamento agendamento = new Agendamento(usuario, servico, dados.data(), dados.hora());
         return agendamentoRepository.save(agendamento);
     }
 

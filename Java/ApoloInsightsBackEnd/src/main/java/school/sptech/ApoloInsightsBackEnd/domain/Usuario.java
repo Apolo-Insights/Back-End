@@ -35,7 +35,6 @@ public class Usuario implements UserDetails {
     private Genero genero;
     private String email;
     private String senha;
-    @Enumerated(EnumType.STRING)
     private Role role;
 
     public Usuario(DadosCadastroUsuario dados) {

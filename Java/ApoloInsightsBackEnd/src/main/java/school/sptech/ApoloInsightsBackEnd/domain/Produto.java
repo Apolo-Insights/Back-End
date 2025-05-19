@@ -17,8 +17,7 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.DadosCadastroProdut
 @NoArgsConstructor
 @Table(name = "produtos")
 @Entity(name = "Produto")
-public class
-Produto {
+public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,12 +25,14 @@ Produto {
     private String descricao;
     private Double preco;
     private String foto;
+    private Integer estoque;
 
     public Produto(@Valid DadosCadastroProduto dados) {
         this.nome = dados.nome();
         this.descricao = dados.descricao();
         this.preco = dados.preco();
         this.foto = dados.foto();
+        this.estoque = 0;
     }
 
     public void atualizarInformacoes(DadosAtualizacaoProduto dados) {
@@ -39,5 +40,13 @@ Produto {
         if (dados.descricao() != null) this.descricao = dados.descricao();
         if (dados.preco() != null) this.preco = dados.preco();
         if (dados.foto() != null) this.foto = dados.foto();
+    }
+
+    public void adicionarEstoque() {
+        this.estoque ++;
+    }
+
+    public void removerEstoque() {
+        this.estoque --;
     }
 }

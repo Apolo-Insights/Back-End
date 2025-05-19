@@ -50,4 +50,18 @@ public class ProdutoController {
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Produto com id %d deletado com sucesso!".formatted(id));
     }
+
+    @PutMapping ("admin/estoque/adicionar/{id}")
+    public ResponseEntity<Void> adicionarEstoque(@PathVariable Long id) {
+        service.adicionarEstoque(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping ("admin/estoque/remover/{id}")
+    public ResponseEntity<Void> removerEstoque(@PathVariable Long id) {
+        service.removerEstoque(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+
 }

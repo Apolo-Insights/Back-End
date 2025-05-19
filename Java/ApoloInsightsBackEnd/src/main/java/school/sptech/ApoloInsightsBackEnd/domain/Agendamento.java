@@ -36,6 +36,12 @@ public class  Agendamento {
         this.data = data;
         this.hora = hora;
         this.formaPagamento = formaPagamento;
+    }
 
+    public Agendamento(Usuario usuario, Servico servico, LocalDate data, LocalTime hora) {
+        this.usuario = usuario;
+        this.servico = servico;
+        this.data = data;
+        this.hora = hora;
     }
 }
