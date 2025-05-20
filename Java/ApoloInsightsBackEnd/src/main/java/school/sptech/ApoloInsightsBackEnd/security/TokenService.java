@@ -34,6 +34,7 @@ public class TokenService {
                     .withIssuer("API Apolo Insights")
                     .withSubject(usuario.getEmail())
                     .withClaim("nome", usuario.getNome())
+                    .withClaim("id", usuario.getId().toString())
                     .withClaim("email", usuario.getEmail())
                     .withClaim("telefone", usuario.getTelefone()) // Certifique-se de que existe
                     .withClaim("genero", usuario.getGenero().toString()) // Certifique-se de que existe
