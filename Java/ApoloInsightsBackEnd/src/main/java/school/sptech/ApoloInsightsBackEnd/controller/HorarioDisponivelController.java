@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosBloqueioHorario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosCadastroHorario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosDetalhamentoHorario;
 import school.sptech.ApoloInsightsBackEnd.service.HorarioDisponivelService;
-
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class HorarioDisponivelController {
     @Autowired
     private HorarioDisponivelService service;
 
-    @PostMapping
+    @PostMapping("/admin/cadastrar")
     public ResponseEntity<DadosDetalhamentoHorario> cadastrarHorario(@Valid @RequestBody DadosCadastroHorario dados){
         service.cadastrarHorario(dados);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -33,9 +33,9 @@ public class HorarioDisponivelController {
         return ResponseEntity.ok(horarios);
     }
 
-//    @PostMapping
-//    public ResponseEntity<DadosDetalhamentoHorario> bloqueioHorario(@Valid @RequestBody DadosBloqueioHorario dados){
-//
-//
-//    }
+    @PutMapping("/admin/bloquear")
+    public ResponseEntity<DadosDetalhamentoHorario> bloqueioHorario(@Valid @RequestBody DadosBloqueioHorario dados){
+        service.bloquearHorario(dados);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

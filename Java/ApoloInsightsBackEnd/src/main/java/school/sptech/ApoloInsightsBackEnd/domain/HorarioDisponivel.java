@@ -20,6 +20,7 @@ public class HorarioDisponivel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private DayOfWeek diaSemana;
+    private LocalDate data;
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
