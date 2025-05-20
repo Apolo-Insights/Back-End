@@ -1,10 +1,12 @@
 package school.sptech.ApoloInsightsBackEnd.service;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosBloqueioHorario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosCadastroHorario;
 import school.sptech.ApoloInsightsBackEnd.domain.HorarioDisponivel;
 import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
@@ -89,4 +91,38 @@ public class HorarioDisponivelService {
 
         return resultado;
     }
+    public void bloquearHorario(@Valid DadosBloqueioHorario dados) {
+        Categoria categoria = categoriaRepository.findById(dados.idCategoria())
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "Categoria", "Categoria não encontrada!"));
+
+        List<HorarioDisponivel> horarios;
+
+        if (Boolean.TRUE.equals(dados.repetirSemanalmente())) {
+            // Bloqueio recorrente: toda semana nesse dia da semana
+            horarios = horarioRepository.findAllByCategoriaIdAndDiaSemanaAndHoraInicioBetween(
+                    dados.idCategoria(),
+                    dados.data().getDayOfWeek(),
+                    dados.horaInicio(),
+                    dados.horaFim()
+            );
+        } else {
+            // Bloqueio pontual: só nessa data exata
+            horarios = horarioRepository.findAllByCategoriaIdAndDataAndHoraInicioBetween(
+                    dados.idCategoria(),
+                    dados.data(),
+                    dados.horaInicio(),
+                    dados.horaFim()
+            );
+        }
+
+        if (horarios.isEmpty()) {
+            throw new RequestError(HttpStatus.NOT_FOUND, "Horário", "Horário não encontrado!");
+        }
+
+        for (HorarioDisponivel horario : horarios) {
+            horario.setBloqueado(true);
+            horarioRepository.save(horario);
+        }
+    }
 }
+
