@@ -30,20 +30,30 @@ public class TokenService {
     public String gerarToken(Usuario usuario){
         try {
             var algoritmo = Algorithm.HMAC256(secret);
-            return JWT.create()
-                    .withIssuer("API Apolo Insights")
+            var jwtBuilder = JWT.create()
+                    .withIssuer(ISSUER)
                     .withSubject(usuario.getEmail())
                     .withClaim("nome", usuario.getNome())
                     .withClaim("id", usuario.getId().toString())
-                    .withClaim("email", usuario.getEmail())
-                    .withClaim("telefone", usuario.getTelefone()) // Certifique-se de que existe
-                    .withClaim("genero", usuario.getGenero().toString()) // Certifique-se de que existe
+                    .withClaim("email", usuario.getEmail());
+
+            if (usuario.getTelefone() != null) {
+                jwtBuilder.withClaim("telefone", usuario.getTelefone());
+            }
+
+            if (usuario.getGenero() != null) {
+                jwtBuilder.withClaim("genero", usuario.getGenero().toString());
+            }
+
+            return jwtBuilder
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
+
         } catch (JWTCreationException exception){
             throw new RuntimeException(GENERATION_ERROR, exception);
         }
     }
+
 
     public String getSubject(String tokenJWT){
         try {

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosDetalhamentoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.*;
 import school.sptech.ApoloInsightsBackEnd.domain.Role;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
@@ -29,6 +27,12 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoUsuario(usuario));
     }
 
+    @PostMapping("/admin")
+    public ResponseEntity<DadosDetalhamentoUsuario> cadastrarFuncionario(@Valid @RequestBody DadosCadastroFuncionario dados) {
+        Usuario usuario = service.cadastrarFuncionario(dados);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoUsuario(usuario));
+    }
+
     @PutMapping
     @io.swagger.v3.oas.annotations.Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
     public ResponseEntity<DadosDetalhamentoUsuario> atualizar(@Valid @RequestBody DadosAtualizacaoUsuario dados){
@@ -43,18 +47,23 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
     }
 
-//    @PutMapping("/admin/{idUsuario}")
-//    public ResponseEntity<DadosDetalhamentoUsuario> atualizarAdmin(@PathVariable Long idUsuario, @RequestParam Role role) {
-//        var usuario = service.atualizarAdmin(idUsuario, role);
-//        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
-//    }
-
     @GetMapping("/admin")
-    public ResponseEntity <List<DadosDetalhamentoUsuario>> listarUsuarios() {
+    public ResponseEntity<List<DadosDetalhamentoUsuario>> listarUsuarios() {
         List<DadosDetalhamentoUsuario> usuarios = service.listarUsuarios();
         return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
 
+    @PostMapping("/gerar-token")
+    public ResponseEntity<String> gerarToken(@RequestBody String email) {
+        String token = service.gerarToken(email);
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
+
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<Void> alterarSenha(@RequestBody DadosAtualizarSenha dados){
+        service.alterarSenha(dados);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
 
 

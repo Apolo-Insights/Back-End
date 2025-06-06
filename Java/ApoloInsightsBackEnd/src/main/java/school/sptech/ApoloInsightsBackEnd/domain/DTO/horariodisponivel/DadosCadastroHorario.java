@@ -1,4 +1,4 @@
-package school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel;
+package school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel;
 
 import java.time.LocalTime;
 

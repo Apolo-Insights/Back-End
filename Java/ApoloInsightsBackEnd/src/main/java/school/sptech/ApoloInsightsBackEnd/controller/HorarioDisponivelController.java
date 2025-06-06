@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosBloqueioHorario;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosCadastroHorario;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosDetalhamentoHorario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosBloqueioHorario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosCadastroHorario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosDetalhamentoHorario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.HorariosPorCategoriaDTO;
 import school.sptech.ApoloInsightsBackEnd.service.HorarioDisponivelService;
-import java.time.DayOfWeek;
-import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "${cors.allowed.origin}")
 @RestController
@@ -27,15 +25,31 @@ public class HorarioDisponivelController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{idCategoria}")
-    public ResponseEntity<Map<DayOfWeek, List<String>>> buscarTodosHorariosDisponiveis(@PathVariable Long idCategoria) {
-        Map<DayOfWeek, List<String>> horarios = service.listarHorariosPorCategoria(idCategoria);
-        return ResponseEntity.ok(horarios);
-    }
+//    @GetMapping("/admin/{idCategoria}")
+//    public ResponseEntity<Map<DayOfWeek, List<String>>> buscarTodosHorariosDisponiveisPorCategoria(@PathVariable Long idCategoria) {
+//        Map<DayOfWeek, List<String>> horarios = service.listarHorariosPorCategoria(idCategoria);
+//        return ResponseEntity.ok(horarios);
+//    }
+
+//    @GetMapping("/admin/todas-categorias")
+//    public ResponseEntity<Map<String, Map<DayOfWeek, List<String>>>> buscarTodosHorariosDisponiveis() {
+//        Map<String, Map<DayOfWeek, List<String>>> horarios = service.listarHorariosDisponiveisTodasCategorias();
+//        return ResponseEntity.ok(horarios);
+//    }
 
     @PutMapping("/admin/bloquear")
     public ResponseEntity<DadosDetalhamentoHorario> bloqueioHorario(@Valid @RequestBody DadosBloqueioHorario dados){
         service.bloquearHorario(dados);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/admin/{categoriaId}")
+    public ResponseEntity<HorariosPorCategoriaDTO> getHorariosPorCategoria(
+            @PathVariable Long categoriaId,
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano) {
+
+        HorariosPorCategoriaDTO response = service.buscarHorariosPorCategoria(categoriaId, mes, ano);
+        return ResponseEntity.ok(response);
     }
 }

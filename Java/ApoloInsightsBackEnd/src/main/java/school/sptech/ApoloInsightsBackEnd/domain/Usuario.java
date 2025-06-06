@@ -2,11 +2,13 @@ package school.sptech.ApoloInsightsBackEnd.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosAtualizacaoUsuario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroFuncionario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.DadosCadastroUsuario;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -46,6 +48,14 @@ public class Usuario implements UserDetails {
         this.email = dados.email();
         this.senha = dados.senha();
         this.role = Role.CLIENTE;
+    }
+
+    public Usuario(@Valid DadosCadastroFuncionario dados) {
+        this.nome = dados.nome();
+        this.cpf = dados.cpf();
+        this.telefone = dados.telefone();
+        this.email = dados.email();
+        this.role = dados.funcao();
     }
 
     public void atualizarInformacoes(DadosAtualizacaoUsuario dados) {

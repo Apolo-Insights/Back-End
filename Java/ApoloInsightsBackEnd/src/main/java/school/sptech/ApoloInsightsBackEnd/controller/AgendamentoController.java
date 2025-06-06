@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamento;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamentoAdmin;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosDetalhamentoAgendamento;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosHistoricoAgendamento;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.*;
 import school.sptech.ApoloInsightsBackEnd.service.AgendamentoService;
 import java.util.List;
 
@@ -39,4 +36,15 @@ public class AgendamentoController {
         var agendamentos = service.listarHistoricoServicos(idUsuario);
         return ResponseEntity.ok(agendamentos);
     }
+
+    @GetMapping("/admin/{idCategoria}")
+    public ResponseEntity<List<DadosListagemPorCategoria>> listarAgendamentosPorCategoria(
+            @PathVariable Long idCategoria,
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano
+    ) {
+        var agendamentos = service.listarAgendamentosPorCategoria(idCategoria, mes, ano);
+        return ResponseEntity.ok(agendamentos);
+    }
+
 }

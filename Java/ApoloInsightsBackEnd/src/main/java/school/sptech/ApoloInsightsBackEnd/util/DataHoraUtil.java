@@ -1,6 +1,7 @@
 package school.sptech.ApoloInsightsBackEnd.util;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DataHoraUtil {
@@ -10,5 +11,10 @@ public class DataHoraUtil {
         long horas = duracao.toHours();
         long minutos = duracao.toMinutes() % 60;
         return String.format("%02d:%02d", horas, minutos);
+    }
+
+    public static String formatarData(LocalDate data) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return data.format(formatter);
     }
 }

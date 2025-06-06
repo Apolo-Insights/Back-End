@@ -5,19 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosBloqueioHorario;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.horarioDisponivel.DadosCadastroHorario;
-import school.sptech.ApoloInsightsBackEnd.domain.HorarioDisponivel;
+import school.sptech.ApoloInsightsBackEnd.domain.*;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosBloqueioHorario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosCadastroHorario;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.HorariosPorCategoriaDTO;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.HorariosPorDiaDTO;
 import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.repository.BloqueioEspecificoRepository;
+import school.sptech.ApoloInsightsBackEnd.repository.BloqueioSemanalRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.HorarioDisponivelRepository;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class HorarioDisponivelService {
@@ -28,16 +31,11 @@ public class HorarioDisponivelService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-//    @Transactional
-//    public HorarioDisponivel cadastrarHorario(DadosCadastroHorario dados) {
-//        Categoria categoria = categoriaRepository.findById(dados.idCategoria())
-//                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND,"Categoria", "Categoria não encontrada!"));
-//
-//        if (horarioRepository.existsHorarioConflitante(dados., dados.horaInicio(), dados.horaFim())) {
-//            throw new RequestError(HttpStatus.BAD_REQUEST, "Horário", "Horário já cadastrado!");
-//        }
-//    }
+    @Autowired
+    private BloqueioSemanalRepository bloqueioSemanalRepository;
 
+    @Autowired
+    private BloqueioEspecificoRepository bloqueioEspecificoRepository;
 
     @Transactional
     public void cadastrarHorario(DadosCadastroHorario dados) {
@@ -68,61 +66,150 @@ public class HorarioDisponivelService {
         };
     }
 
-    public Map<DayOfWeek, List<String>> listarHorariosPorCategoria(Long idCategoria) {
-        List<HorarioDisponivel> horarios = horarioRepository.findAllByCategoriaIdAndBloqueadoFalse(idCategoria);
 
-        if (horarios.isEmpty()) {
-            throw new RuntimeException("Nenhum horário encontrado para a categoria: " + idCategoria);
-        }
 
-        Map<DayOfWeek, List<String>> resultado = new HashMap<>();
-
-        for (HorarioDisponivel horario : horarios) {
-            List<String> listaHorarios = new ArrayList<>();
-            LocalTime atual = horario.getHoraInicio();
-
-            while (!atual.isAfter(horario.getHoraFim().minusMinutes(10))) {
-                listaHorarios.add(atual.toString());
-                atual = atual.plusMinutes(10);
-            }
-
-            resultado.put(horario.getDiaSemana(), listaHorarios);
-        }
-
-        return resultado;
-    }
     public void bloquearHorario(@Valid DadosBloqueioHorario dados) {
         Categoria categoria = categoriaRepository.findById(dados.idCategoria())
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "Categoria", "Categoria não encontrada!"));
 
-        List<HorarioDisponivel> horarios;
+        validarHorario(dados);
 
         if (Boolean.TRUE.equals(dados.repetirSemanalmente())) {
-            // Bloqueio recorrente: toda semana nesse dia da semana
-            horarios = horarioRepository.findAllByCategoriaIdAndDiaSemanaAndHoraInicioBetween(
+            var bloqueio = new BloqueioSemanal(categoria, dados); // você cria o construtor
+            bloqueioSemanalRepository.save(bloqueio);
+        } else {
+            var bloqueio = new BloqueioEspecifico(categoria, dados);
+            bloqueioEspecificoRepository.save(bloqueio);
+        }
+    }
+
+
+
+
+    private List<HorarioDisponivel> buscarHorariosParaBloqueio(DadosBloqueioHorario dados) {
+        if (Boolean.TRUE.equals(dados.repetirSemanalmente())) {
+            // Bloqueio recorrente: busca pelo dia da semana
+            DayOfWeek diaSemana = dados.data().getDayOfWeek(); // MONDAY = 1, SUNDAY = 7
+            // Converte domingo = 0, segunda = 1, ..., sábado = 6
+
+            return horarioRepository.buscarHorariosPorIntervaloSemanal(
                     dados.idCategoria(),
-                    dados.data().getDayOfWeek(),
+                    diaSemana,
                     dados.horaInicio(),
                     dados.horaFim()
             );
         } else {
-            // Bloqueio pontual: só nessa data exata
-            horarios = horarioRepository.findAllByCategoriaIdAndDataAndHoraInicioBetween(
+            // Bloqueio específico: busca pela data exata
+            return horarioRepository.findAllByCategoriaIdAndDataAndHoraInicioBetween(
                     dados.idCategoria(),
                     dados.data(),
                     dados.horaInicio(),
                     dados.horaFim()
             );
         }
-
-        if (horarios.isEmpty()) {
-            throw new RequestError(HttpStatus.NOT_FOUND, "Horário", "Horário não encontrado!");
-        }
-
-        for (HorarioDisponivel horario : horarios) {
-            horario.setBloqueado(true);
-            horarioRepository.save(horario);
-        }
     }
+
+    public HorariosPorCategoriaDTO buscarHorariosPorCategoria(Long categoriaId, Integer mes, Integer ano) {
+        Categoria categoria = categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+
+        List<HorarioDisponivel> horariosDisponiveis = horarioRepository.findByCategoria(categoria);
+        List<BloqueioSemanal> bloqueiosSemanais = bloqueioSemanalRepository.findByCategoria(categoria);
+        List<BloqueioEspecifico> bloqueiosEspecificos = bloqueioEspecificoRepository.findByCategoria(categoria);
+
+        LocalDate hoje = LocalDate.now();
+
+        YearMonth anoMes;
+        if (mes != null && ano != null) {
+            anoMes = YearMonth.of(ano, mes);
+        } else {
+            anoMes = YearMonth.from(hoje);
+        }
+
+        List<HorariosPorDiaDTO> listaDias = new ArrayList<>();
+
+        // Percorrer todos os dias do mês selecionado
+        for (int diaDoMes = 1; diaDoMes <= anoMes.lengthOfMonth(); diaDoMes++) {
+            LocalDate dia = anoMes.atDay(diaDoMes);
+
+            // Se não passou mês/ano, limitar para os próximos 7 dias a partir de hoje
+            if (mes == null || ano == null) {
+                if (dia.isBefore(hoje) || dia.isAfter(hoje.plusDays(6))) {
+                    continue; // pula dias fora dos próximos 7 dias
+                }
+            }
+
+            DayOfWeek diaSemana = dia.getDayOfWeek();
+
+            List<HorarioDisponivel> horariosDoDia = horariosDisponiveis.stream()
+                    .filter(h -> h.getDiaSemana() == diaSemana)
+                    .toList();
+
+            List<BloqueioSemanal> bloqueiosSemanaisDoDia = bloqueiosSemanais.stream()
+                    .filter(b -> b.getDiaSemana() == diaSemana.getValue())
+                    .toList();
+
+            List<BloqueioEspecifico> bloqueiosEspecificosDoDia = bloqueiosEspecificos.stream()
+                    .filter(b -> b.getData().equals(dia))
+                    .toList();
+
+            Set<String> horariosBloqueados = new HashSet<>();
+            Set<String> horariosDisponiveisSet = new HashSet<>();
+
+            for (HorarioDisponivel hd : horariosDoDia) {
+                LocalTime inicio = hd.getHoraInicio();
+                LocalTime fim = hd.getHoraFim();
+
+                for (LocalTime t = inicio; !t.isAfter(fim.minusMinutes(10)); t = t.plusMinutes(10)) {
+                    final LocalTime horarioAtual = t;
+
+                    boolean bloqueado = bloqueiosSemanaisDoDia.stream()
+                            .anyMatch(b -> estaDentroDoIntervalo(horarioAtual, b.getHoraInicio(), b.getHoraFim()))
+                            || bloqueiosEspecificosDoDia.stream()
+                            .anyMatch(b -> estaDentroDoIntervalo(horarioAtual, b.getHoraInicio(), b.getHoraFim()));
+
+                    String horarioStr = horarioAtual.toString();
+
+                    if (bloqueado) {
+                        horariosBloqueados.add(horarioStr);
+                    } else {
+                        horariosDisponiveisSet.add(horarioStr);
+                    }
+                }
+            }
+
+            List<String> horariosBloqueadosList = new ArrayList<>(horariosBloqueados);
+            horariosBloqueadosList.sort(String::compareTo);
+
+            List<String> horariosDisponiveisList = new ArrayList<>(horariosDisponiveisSet);
+            horariosDisponiveisList.sort(String::compareTo);
+
+            listaDias.add(new HorariosPorDiaDTO(
+                    dia.format(DateTimeFormatter.ofPattern("dd/MM")),
+                    horariosBloqueadosList,
+                    horariosDisponiveisList
+            ));
+        }
+
+        return new HorariosPorCategoriaDTO(categoria.getNome(), listaDias);
+    }
+
+    private boolean estaDentroDoIntervalo(LocalTime time, LocalTime inicio, LocalTime fim) {
+        return !time.isBefore(inicio) && time.isBefore(fim);
+    }
+
+private void validarHorario(@Valid DadosBloqueioHorario dados) {
+    if (dados.horaInicio().isAfter(dados.horaFim())) {
+        throw new RequestError(HttpStatus.BAD_REQUEST, "horarioInicio", "Horário de início não pode ser depois que o horário de fim.");
+    }
+
+    if (dados.data() != null && dados.data().isBefore(LocalDate.now())) {
+        throw new RequestError(HttpStatus.BAD_REQUEST, "data", "Data não pode ser no passado.");
+    }
+
+    if (dados.horaInicio().equals(dados.horaFim())) {
+        throw new RequestError(HttpStatus.BAD_REQUEST, "horario", "Horário de início não pode ser igual ao horário de fim.");
+    }
+}
 }
 

@@ -27,7 +27,6 @@ public class HorarioDisponivel {
 
     private LocalTime horaInicio;
     private LocalTime horaFim;
-    private boolean bloqueado;
 
 
     public HorarioDisponivel(Categoria categoria, DayOfWeek diaSemana, LocalTime horaInicio, LocalTime horaFim) {

@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "agendamentos")
-public class  Agendamento {
+public class Agendamento {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -29,6 +29,8 @@ public class  Agendamento {
     private LocalTime hora;
     @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public Agendamento(Usuario usuario, Servico servico, LocalDate data, LocalTime hora, FormaPagamento formaPagamento) {
         this.usuario = usuario;
@@ -36,6 +38,7 @@ public class  Agendamento {
         this.data = data;
         this.hora = hora;
         this.formaPagamento = formaPagamento;
+        this.status = Status.AGENDADO;
     }
 
     public Agendamento(Usuario usuario, Servico servico, LocalDate data, LocalTime hora) {

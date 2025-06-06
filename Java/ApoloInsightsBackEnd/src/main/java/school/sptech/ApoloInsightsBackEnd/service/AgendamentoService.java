@@ -8,12 +8,15 @@ import school.sptech.ApoloInsightsBackEnd.domain.Agendamento;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamento;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamentoAdmin;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosHistoricoAgendamento;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosListagemPorCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.AgendamentoRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.ServicoRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
 import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -57,5 +60,23 @@ public class AgendamentoService {
             throw new RequestError(HttpStatus.NOT_FOUND, "sem campo", "Nenhum agendamento de serviço encontrado");
         }
         return agendamentoRepository.findByUsuarioId(idUsuario).stream().map(DadosHistoricoAgendamento::new).toList();
+    }
+
+    public List<DadosListagemPorCategoria> listarAgendamentosPorCategoria(Long idCategoria, Integer mes, Integer ano) {
+        LocalDate inicio = LocalDate.of(ano, mes, 1);
+        LocalDate fim = inicio.withDayOfMonth(inicio.lengthOfMonth());
+        List<Agendamento> agendamentos = agendamentoRepository
+                .findByServico_Categoria_IdAndDataBetween(idCategoria, inicio, fim);
+
+        return agendamentos.stream()
+                .map(agendamento -> new DadosListagemPorCategoria(
+                        agendamento.getUsuario().getNome(),
+                        agendamento.getServico().getNome(),
+                        agendamento.getData(),
+                        agendamento.getHora(),
+                        agendamento.getStatus(),
+                        agendamento.getFormaPagamento().toString().toLowerCase()
+                ))
+                .toList();
     }
 }
