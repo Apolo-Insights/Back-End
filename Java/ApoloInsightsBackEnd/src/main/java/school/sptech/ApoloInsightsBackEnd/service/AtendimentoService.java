@@ -39,7 +39,7 @@ public class AtendimentoService {
         Usuario cliente = agendamentoExistente.getUsuario();
 
         if (agendamentoExistente.getStatus() != Status.AGENDADO) {
-            throw new RequestError(HttpStatus.BAD_REQUEST, "Sem campo", "O agendamento deve estar agendado para ser finalizado.");
+            throw new RequestError(HttpStatus.BAD_REQUEST, "Sem campo", "O atendimento já foi finalizado ou cancelado.");
         }
 
         if (valor == null || valor <= 0) {
@@ -55,6 +55,10 @@ public class AtendimentoService {
         Agendamento agendamentoExistente = agendamentoRepository.findById(idAgendamento)
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "Agendamento", "Agendamento não encontrado!"));
         agendamentoExistente.setStatus(Status.CANCELADO);
+
+        if (agendamentoExistente.getStatus() != Status.AGENDADO) {
+            throw new RequestError(HttpStatus.BAD_REQUEST, "Sem campo", "O atendimento já foi finalizado ou cancelado.");
+        }
 
         enviarEmail(agendamentoExistente);
         agendamentoRepository.save(agendamentoExistente);
