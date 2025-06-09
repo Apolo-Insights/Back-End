@@ -1,6 +1,7 @@
 package school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import school.sptech.ApoloInsightsBackEnd.domain.Role;
 
 public record DadosCadastroFuncionario(
@@ -16,7 +17,7 @@ public record DadosCadastroFuncionario(
         @NotBlank(message = "Email inválido")
         String email,
 
-        @NotBlank
+        @NotNull
         Role funcao
 ) {
 }
