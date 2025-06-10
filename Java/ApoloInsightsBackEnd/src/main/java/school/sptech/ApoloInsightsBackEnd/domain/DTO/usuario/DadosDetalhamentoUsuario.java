@@ -4,7 +4,6 @@ import school.sptech.ApoloInsightsBackEnd.domain.Role;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 
 public record DadosDetalhamentoUsuario(
-        Long id,
         String nome,
         String cpf,
         String email,
@@ -13,7 +12,6 @@ public record DadosDetalhamentoUsuario(
 ) {
     public DadosDetalhamentoUsuario(Usuario dados) {
         this(
-                dados.getId(),
                 dados.getNome(),
                 dados.getCpf(),
                 dados.getEmail(),
