@@ -11,7 +11,7 @@ public record DadosCadastroProduto(
         @NotNull(message = "O preço do Produto não foi inserido")
         Double preco,
 
-        String foto
+        String fotoBase64
 ) {
 
 }

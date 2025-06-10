@@ -2,6 +2,6 @@ package school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria;
 
 public record DadosAtualizacaoCategoria(
         String nome,
-        String foto
+        String fotoBase64
 ) {
 }

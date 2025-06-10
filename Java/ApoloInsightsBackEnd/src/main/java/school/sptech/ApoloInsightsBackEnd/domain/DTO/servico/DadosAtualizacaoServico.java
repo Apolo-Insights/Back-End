@@ -4,7 +4,7 @@ public record DadosAtualizacaoServico(
         String nome,
         String descricao,
         Double preco,
-        String foto,
+        String fotoBase64,
         String duracao
 ) {
 }

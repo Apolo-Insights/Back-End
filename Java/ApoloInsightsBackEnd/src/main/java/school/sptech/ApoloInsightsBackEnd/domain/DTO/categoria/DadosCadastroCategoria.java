@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 public record DadosCadastroCategoria(
         @NotBlank(message = "O nome da Categoria não foi inserido")
         String nome,
-        String foto
+        String fotoBase64
 ) {
 }

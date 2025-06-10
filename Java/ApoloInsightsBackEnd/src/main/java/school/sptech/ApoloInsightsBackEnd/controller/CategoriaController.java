@@ -13,7 +13,10 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoC
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosDetalhamentoCategoria;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
+import school.sptech.ApoloInsightsBackEnd.service.AzureBlobService;
 import school.sptech.ApoloInsightsBackEnd.service.CategoriaService;
+
+import java.util.Base64;
 
 @CrossOrigin(origins = "${cors.allowed.origin}")
 @RestController
@@ -23,10 +26,24 @@ public class CategoriaController {
     @Autowired
     CategoriaService service;
 
+    @Autowired
+    private AzureBlobService azureBlobService;
+
     @PostMapping
     public ResponseEntity<DadosDetalhamentoCategoria> cadastrarCategoria(
             @Valid @RequestBody DadosCadastroCategoria dados) {
-        var categoria = service.cadastrarCategoria(dados);
+        String urlFoto = null;
+
+        if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
+            byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
+            urlFoto = azureBlobService.upload(imagemBytes);
+        }
+
+        DadosCadastroCategoria dadosCadastro = new DadosCadastroCategoria(
+                dados.nome(),
+                urlFoto
+        );
+        var categoria = service.cadastrarCategoria(dadosCadastro);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoCategoria(categoria));
     }
 
@@ -41,7 +58,18 @@ public class CategoriaController {
     public ResponseEntity<DadosDetalhamentoCategoria> atualizarCategoria(
             @RequestBody DadosAtualizacaoCategoria dados,
             @PathVariable Long id) {
-        Categoria categoria = service.atualizarCategoria(id, dados);
+        String urlFoto = null;
+
+        if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
+            byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
+            urlFoto = azureBlobService.upload(imagemBytes);
+        }
+        DadosAtualizacaoCategoria dadosAtualizacao = new DadosAtualizacaoCategoria(
+                dados.nome(),
+                urlFoto
+        );
+
+        Categoria categoria = service.atualizarCategoria(id, dadosAtualizacao);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategoria(categoria));
     }
 

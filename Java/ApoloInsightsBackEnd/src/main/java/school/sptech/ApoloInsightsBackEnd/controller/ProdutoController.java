@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.*;
 import school.sptech.ApoloInsightsBackEnd.domain.Produto;
+import school.sptech.ApoloInsightsBackEnd.service.AzureBlobService;
 import school.sptech.ApoloInsightsBackEnd.service.ProdutoService;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/produtos")
@@ -19,9 +21,26 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
 
+    @Autowired
+    private AzureBlobService azureBlobService;
+
     @PostMapping
-    public ResponseEntity<DadosDetalhamentoProduto> cadastrarProduto(@Valid @RequestBody DadosCadastroProduto dados) {
-        Produto produto = service.cadastrar(dados);
+    public ResponseEntity<DadosDetalhamentoProduto> cadastrarProduto(@RequestBody DadosCadastroProduto dados) throws Exception {
+        String urlFoto = null;
+
+        if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
+            byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
+            urlFoto = azureBlobService.upload(imagemBytes);
+        }
+
+        DadosCadastroProduto cadastro = new DadosCadastroProduto(
+                dados.nome(),
+                dados.descricao(),
+                dados.preco(),
+                urlFoto
+        );
+
+        Produto produto = service.cadastrar(cadastro);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoProduto(produto));
     }
 
@@ -29,7 +48,22 @@ public class ProdutoController {
     public ResponseEntity<DadosDetalhamentoProduto> atualizarProduto(
             @Valid @RequestBody DadosAtualizacaoProduto dados,
             @PathVariable Long id) {
-        Produto produto = service.atualizar(id, dados);
+
+        String urlFoto = null;
+
+        if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
+            byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
+            urlFoto = azureBlobService.upload(imagemBytes);
+        }
+
+        DadosAtualizacaoProduto dadosAtualizacao = new DadosAtualizacaoProduto(
+                dados.nome(),
+                dados.descricao(),
+                dados.preco(),
+                urlFoto
+        );
+
+        Produto produto = service.atualizar(id, dadosAtualizacao);
         return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoProduto(produto));
     }
 

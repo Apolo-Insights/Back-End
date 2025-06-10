@@ -46,8 +46,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario atualizar(DadosAtualizacaoUsuario dados){
-        Usuario usuario = repository.findById(dados.id())
+    public Usuario atualizar(Long id, DadosAtualizacaoUsuario dados){
+        Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "id", "Usuário não encontrado"));
 
         usuario.atualizarInformacoes(dados);
@@ -68,10 +68,10 @@ public class UsuarioService {
         repository.delete(usuario);
     }
 
-    public List<DadosDetalhamentoUsuario> listarUsuarios() {
-        List<DadosDetalhamentoUsuario> usuarios = repository.findAll()
+    public List<DadosListagemUsuario> listarUsuarios() {
+        List<DadosListagemUsuario> usuarios = repository.findAll()
                 .stream()
-                .map(DadosDetalhamentoUsuario::new)
+                .map(DadosListagemUsuario::new)
                 .toList();
 
         if (usuarios.isEmpty()) {

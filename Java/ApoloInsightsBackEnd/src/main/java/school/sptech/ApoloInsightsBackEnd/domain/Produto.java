@@ -31,7 +31,7 @@ public class Produto {
         this.nome = dados.nome();
         this.descricao = dados.descricao();
         this.preco = dados.preco();
-        this.foto = dados.foto();
+        this.foto = dados.fotoBase64();
         this.estoque = 0;
     }
 
@@ -39,7 +39,7 @@ public class Produto {
         if (dados.nome() != null) this.nome = dados.nome();
         if (dados.descricao() != null) this.descricao = dados.descricao();
         if (dados.preco() != null) this.preco = dados.preco();
-        if (dados.foto() != null) this.foto = dados.foto();
+        if (dados.fotoBase64() != null) this.foto = dados.fotoBase64();
     }
 
     public void adicionarEstoque() {

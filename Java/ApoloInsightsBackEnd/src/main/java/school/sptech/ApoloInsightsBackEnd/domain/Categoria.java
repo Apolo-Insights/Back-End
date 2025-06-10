@@ -23,11 +23,11 @@ public class Categoria {
 
     public Categoria(DadosCadastroCategoria dados) {
         this.nome = dados.nome();
-        this.foto = dados.foto();
+        this.foto = dados.fotoBase64();
     }
 
     public void atualizarInformacoes(DadosAtualizacaoCategoria dados) {
         if (dados.nome() != null) this.nome = dados.nome();
-        if (dados.foto() != null) this.foto = dados.foto();
+        if (dados.fotoBase64() != null) this.foto = dados.fotoBase64();
     }
 }

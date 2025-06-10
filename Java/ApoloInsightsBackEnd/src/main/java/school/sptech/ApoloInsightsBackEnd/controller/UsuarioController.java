@@ -7,11 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.*;
-import school.sptech.ApoloInsightsBackEnd.domain.Role;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
 import java.util.List;
 
+@CrossOrigin(origins = "${cors.allowed.origin}")
 @Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @RestController
 @RequestMapping("/usuarios")
@@ -33,26 +33,6 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoUsuario(usuario));
     }
 
-    @PutMapping
-    @io.swagger.v3.oas.annotations.Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
-    public ResponseEntity<DadosDetalhamentoUsuario> atualizar(@Valid @RequestBody DadosAtualizacaoUsuario dados){
-        Usuario usuario = service.atualizar(dados);
-        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
-    }
-
-    @DeleteMapping("/{id}")
-    @io.swagger.v3.oas.annotations.Operation(summary = "Deletar usuário", description = "Remove um usuário do sistema pelo ID")
-    public ResponseEntity<String> deletar(@PathVariable Long id){
-        service.deletar(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
-    }
-
-    @GetMapping("/admin")
-    public ResponseEntity<List<DadosDetalhamentoUsuario>> listarUsuarios() {
-        List<DadosDetalhamentoUsuario> usuarios = service.listarUsuarios();
-        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
-    }
-
     @PostMapping("/gerar-token")
     public ResponseEntity<String> gerarToken(@RequestBody String email) {
         String token = service.gerarToken(email);
@@ -64,6 +44,30 @@ public class UsuarioController {
         service.alterarSenha(dados);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @PutMapping("/{id}")
+    @io.swagger.v3.oas.annotations.Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
+    public ResponseEntity<DadosDetalhamentoUsuario> atualizar(
+            @Valid @RequestBody DadosAtualizacaoUsuario dados,
+            @PathVariable Long id){
+        Usuario usuario = service.atualizar(id, dados);
+        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoUsuario(usuario));
+    }
+
+    @DeleteMapping("/{id}")
+    @io.swagger.v3.oas.annotations.Operation(summary = "Deletar usuário", description = "Remove um usuário do sistema pelo ID")
+    public ResponseEntity<String> deletar(@PathVariable Long id){
+        service.deletar(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<List<DadosListagemUsuario>> listarUsuarios() {
+        List<DadosListagemUsuario> usuarios = service.listarUsuarios();
+        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+    }
+
+
 }
 
 
