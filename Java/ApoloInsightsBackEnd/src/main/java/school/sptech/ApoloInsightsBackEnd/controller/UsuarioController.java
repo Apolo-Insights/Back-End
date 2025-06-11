@@ -11,7 +11,8 @@ import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.service.UsuarioService;
 import java.util.List;
 
-@CrossOrigin(origins = "${cors.allowed.origin}")
+
+
 @Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @RestController
 @RequestMapping("/usuarios")
