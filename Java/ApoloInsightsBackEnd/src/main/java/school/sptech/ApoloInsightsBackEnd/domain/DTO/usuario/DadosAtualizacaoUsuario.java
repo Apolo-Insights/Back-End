@@ -7,7 +7,7 @@ public record DadosAtualizacaoUsuario(
         String nome,
 
         String telefone,
-
+        String cpf,
         String email,
         Genero genero,
         Role funcao

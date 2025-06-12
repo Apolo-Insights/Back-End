@@ -37,7 +37,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,
                                 "/login",
-                                "/usuarios").permitAll()
+                                "/usuarios",
+                                "/usuarios/gerar-token").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/servicos/*",
                                 "/servicos",
@@ -45,6 +46,8 @@ public class SecurityConfigurations {
                                 "/produtos",
                                 "/categorias",
                                 "/categorias/*").permitAll()
+                        .requestMatchers(HttpMethod.PUT,
+                                "/usuarios/alterar-senha").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",

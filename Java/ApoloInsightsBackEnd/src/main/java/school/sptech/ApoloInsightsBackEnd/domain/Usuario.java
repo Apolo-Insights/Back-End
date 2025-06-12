@@ -71,6 +71,9 @@ public class Usuario implements UserDetails {
         if (dados.genero() != null) {
             this.genero = dados.genero();
         }
+        if (dados.cpf() != null) {
+            this.cpf = dados.cpf();
+        }
         if (dados.funcao() != null) {
             this.role = dados.funcao();
         }

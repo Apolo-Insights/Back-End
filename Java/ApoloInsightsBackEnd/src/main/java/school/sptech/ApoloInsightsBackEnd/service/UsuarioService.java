@@ -44,7 +44,7 @@ public class UsuarioService {
             throw new RequestError(
                     HttpStatus.CONFLICT, "cpf", "Esse CPF já está cadastrado");
         }
-
+        validarSenha(dados.senha());
         Usuario usuario = new Usuario(dados);
         usuario.setSenha(SenhaUtil.hashSenha(usuario.getSenha()));
         return repository.save(usuario);
@@ -63,7 +63,9 @@ public class UsuarioService {
     public void alterarSenha(DadosAtualizarSenha dados) {
         Usuario usuario = repository.findByEmail(dados.email())
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "email", "Email não encontrado"));
-        usuario.setSenha(SenhaUtil.hashSenha(usuario.getSenha()));
+        validarSenha(dados.novaSenha());
+        usuario.setSenha(SenhaUtil.hashSenha(dados.novaSenha()));
+        repository.save(usuario);
     }
 
     @Transactional
@@ -106,11 +108,26 @@ public class UsuarioService {
 
     public String gerarToken(String email) {
         Usuario usuario = repository.findByEmail(email)
-                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "email", "Usuário não encontrado"));
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "email", "Esse e-mail não pertence a nenhuma conta."));
         String token = TokenGenerator.gerarTokenAlfanumerico();
 
         enviarEmail(token, usuario);
         return token;
+    }
+
+    private void validarSenha(String senha) {
+        if (senha.length() < 8) {
+            throw new RequestError(HttpStatus.BAD_REQUEST, "senha", "A senha deve ter pelo menos 8 caracteres");
+        }
+        if (!senha.matches(".*[A-Z].*")) {
+            throw new RequestError(HttpStatus.BAD_REQUEST, "senha", "A senha deve conter pelo menos uma letra maiúscula");
+        }
+        if (!senha.matches(".*[a-z].*")) {
+            throw new RequestError(HttpStatus.BAD_REQUEST, "senha", "A senha deve conter pelo menos uma letra minúscula");
+        }
+        if (!senha.matches(".*\\d.*")) {
+            throw new RequestError(HttpStatus.BAD_REQUEST, "senha", "A senha deve conter pelo menos um número");
+        }
     }
 
 
@@ -154,7 +171,7 @@ public class UsuarioService {
                                 <td style="padding: 30px; text-align: center; color: #333333;">
                                     <p style="font-size: 16px; margin-bottom: 20px;">Olá, <strong>%s</strong>,</p>
                                     <p style="font-size: 16px; margin-bottom: 20px;">Recebemos uma solicitação para redefinir a senha associada ao e-mail <strong>%s</strong>.</p>
-                                    <p style="font-size: 16px; margin-bottom: 20px;">Use o código abaixo para redefinir sua senha:</p>
+                                    <p style="font-size: 16px; margin-bottom: 20px;">Use o token abaixo para redefinir sua senha:</p>
                                     <div style="font-size: 24px; font-weight: bold; margin: 20px 0; color: #e83e8c;">%s</div>
                                     <p style="font-size: 14px; color: #777;">Se você não solicitou essa alteração, por favor ignore este e-mail.</p>
                                 </td>

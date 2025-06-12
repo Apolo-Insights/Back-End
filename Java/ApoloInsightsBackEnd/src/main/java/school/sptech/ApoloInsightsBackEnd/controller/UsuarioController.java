@@ -36,6 +36,7 @@ public class UsuarioController {
 
     @PostMapping("/gerar-token")
     public ResponseEntity<String> gerarToken(@RequestBody String email) {
+        System.out.println("TOKEN RECEBIDO: " + email);
         String token = service.gerarToken(email);
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
@@ -67,8 +68,6 @@ public class UsuarioController {
         List<DadosListagemUsuario> usuarios = service.listarUsuarios();
         return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
-
-
 }
 
 
