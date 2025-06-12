@@ -66,6 +66,7 @@ public class UsuarioService {
         usuario.setSenha(SenhaUtil.hashSenha(usuario.getSenha()));
     }
 
+    @Transactional
     public void deletar(Long id) {
         Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "id", "Usuário não encontrado"));
