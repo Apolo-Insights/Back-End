@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.usuario.*;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
+import school.sptech.ApoloInsightsBackEnd.repository.AgendamentoRepository;
 import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
 import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
 import school.sptech.ApoloInsightsBackEnd.security.SenhaUtil;
@@ -27,7 +28,11 @@ public class UsuarioService {
     private JavaMailSender emailSender;
 
     @Autowired
-    UsuarioRepository repository;
+    private UsuarioRepository repository;
+
+    @Autowired
+    private AgendamentoRepository agendamentoRepository;
+
 
     @Transactional
     public Usuario cadastrar(DadosCadastroUsuario dados){
@@ -64,7 +69,7 @@ public class UsuarioService {
     public void deletar(Long id) {
         Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "id", "Usuário não encontrado"));
-
+        agendamentoRepository.deleteByUsuarioId(id);
         repository.delete(usuario);
     }
 

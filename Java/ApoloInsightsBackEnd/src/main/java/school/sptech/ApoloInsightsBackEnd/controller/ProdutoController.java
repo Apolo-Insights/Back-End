@@ -27,11 +27,12 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<DadosDetalhamentoProduto> cadastrarProduto(@RequestBody DadosCadastroProduto dados) throws Exception {
         String urlFoto = null;
-
+        System.out.println("Dados recebidos base64: " + dados.fotoBase64());
         if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
             byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
             urlFoto = azureBlobService.upload(imagemBytes);
         }
+        System.out.println("URL da foto após upload: " + urlFoto);
 
         DadosCadastroProduto cadastro = new DadosCadastroProduto(
                 dados.nome(),

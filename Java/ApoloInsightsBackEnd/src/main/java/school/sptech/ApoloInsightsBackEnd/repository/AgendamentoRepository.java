@@ -13,4 +13,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     List<Agendamento> findByUsuarioId(Long usuarioId);
 
     List<Agendamento> findByServico_Categoria_IdAndDataBetween(Long idCategoria, LocalDate inicio, LocalDate fim);
+
+    void deleteByUsuarioId(Long id);
 }
