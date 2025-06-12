@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface BloqueioSemanalRepository extends JpaRepository<BloqueioSemanal, Long> {
     List<BloqueioSemanal> findByCategoria(Categoria categoria);
+
+    List<BloqueioSemanal> findByCategoriaIn(List<Categoria> categorias);
 }

@@ -36,5 +36,8 @@ public interface HorarioDisponivelRepository extends JpaRepository<HorarioDispon
 
 
     List<HorarioDisponivel> findByCategoria(Categoria categoria);
+
+    List<HorarioDisponivel> findByCategoriaIn(List<Categoria> categorias);
+
 }
 

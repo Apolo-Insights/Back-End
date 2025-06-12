@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface BloqueioEspecificoRepository extends JpaRepository<BloqueioEspecifico, Long> {
     List<BloqueioEspecifico> findByCategoria(Categoria categoria);
+
+    List<BloqueioEspecifico> findByCategoriaIn(List<Categoria> categorias);
 }

@@ -1,5 +1,6 @@
 package school.sptech.ApoloInsightsBackEnd.domain.DTO.servico;
 
+import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.util.DataHoraUtil;
 
@@ -8,7 +9,8 @@ public record DadosDetalhamentoServico(
         String descricao,
         Double preco,
         String foto,
-        String duracao
+        String duracao,
+        Categoria categoria
 ) {
     public DadosDetalhamentoServico(Servico servico) {
         this(
@@ -16,6 +18,7 @@ public record DadosDetalhamentoServico(
                 servico.getDescricao(),
                 servico.getPreco(),
                 servico.getFoto(),
-                DataHoraUtil.formatarDuracao(servico.getDuracao()));
+                DataHoraUtil.formatarDuracao(servico.getDuracao()),
+                servico.getCategoria());
     }
 }

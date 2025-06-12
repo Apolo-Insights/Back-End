@@ -11,6 +11,8 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosDeta
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.HorariosPorCategoriaDTO;
 import school.sptech.ApoloInsightsBackEnd.service.HorarioDisponivelService;
 
+import java.util.List;
+
 @CrossOrigin(origins = "${cors.allowed.origin}")
 @RestController
 @RequestMapping("/horarios-disponiveis")
@@ -43,13 +45,23 @@ public class HorarioDisponivelController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/admin/{categoriaId}")
-    public ResponseEntity<HorariosPorCategoriaDTO> getHorariosPorCategoria(
+    @GetMapping("/{categoriaId}")
+    public ResponseEntity<HorariosPorCategoriaDTO> getHorariosPorCategoriaUnica(
             @PathVariable Long categoriaId,
             @RequestParam(required = false) Integer mes,
             @RequestParam(required = false) Integer ano) {
 
-        HorariosPorCategoriaDTO response = service.buscarHorariosPorCategoria(categoriaId, mes, ano);
+        HorariosPorCategoriaDTO response = service.buscarHorariosPorCategoriaUnica(categoriaId, mes, ano);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<HorariosPorCategoriaDTO> getHorariosPorVariasCategorias(
+            @RequestParam (name = "ids") List<Long> categoriaIds,
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano) {
+
+        HorariosPorCategoriaDTO response = service.buscarHorariosPorVariasCategorias(categoriaIds, mes, ano);
         return ResponseEntity.ok(response);
     }
 }

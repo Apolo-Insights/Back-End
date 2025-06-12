@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HorarioDisponivelService {
@@ -109,7 +110,7 @@ public class HorarioDisponivelService {
         }
     }
 
-    public HorariosPorCategoriaDTO buscarHorariosPorCategoria(Long categoriaId, Integer mes, Integer ano) {
+    public HorariosPorCategoriaDTO buscarHorariosPorCategoriaUnica(Long categoriaId, Integer mes, Integer ano) {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
@@ -194,9 +195,97 @@ public class HorarioDisponivelService {
         return new HorariosPorCategoriaDTO(categoria.getNome(), listaDias);
     }
 
+    public HorariosPorCategoriaDTO buscarHorariosPorVariasCategorias(List<Long> categoriaIds, Integer mes, Integer ano) {
+        List<Categoria> categorias = categoriaRepository.findAllById(categoriaIds);
+        if (categorias.isEmpty()) {
+            throw new RuntimeException("Nenhuma categoria encontrada");
+        }
+
+        List<HorarioDisponivel> horariosDisponiveis = horarioRepository.findByCategoriaIn(categorias);
+        List<BloqueioSemanal> bloqueiosSemanais = bloqueioSemanalRepository.findByCategoriaIn(categorias);
+        List<BloqueioEspecifico> bloqueiosEspecificos = bloqueioEspecificoRepository.findByCategoriaIn(categorias);
+
+        LocalDate hoje = LocalDate.now();
+
+        YearMonth anoMes = (mes != null && ano != null) ? YearMonth.of(ano, mes) : YearMonth.from(hoje);
+
+        List<HorariosPorDiaDTO> listaDias = new ArrayList<>();
+
+        for (int diaDoMes = 1; diaDoMes <= anoMes.lengthOfMonth(); diaDoMes++) {
+            LocalDate dia = anoMes.atDay(diaDoMes);
+
+            if (mes == null || ano == null) {
+                if (dia.isBefore(hoje) || dia.isAfter(hoje.plusDays(6))) {
+                    continue;
+                }
+            }
+
+            DayOfWeek diaSemana = dia.getDayOfWeek();
+
+            List<HorarioDisponivel> horariosDoDia = horariosDisponiveis.stream()
+                    .filter(h -> h.getDiaSemana() == diaSemana)
+                    .toList();
+
+            List<BloqueioSemanal> bloqueiosSemanaisDoDia = bloqueiosSemanais.stream()
+                    .filter(b -> b.getDiaSemana() == diaSemana.getValue())
+                    .toList();
+
+            List<BloqueioEspecifico> bloqueiosEspecificosDoDia = bloqueiosEspecificos.stream()
+                    .filter(b -> b.getData().equals(dia))
+                    .toList();
+
+            Set<String> horariosBloqueados = new HashSet<>();
+            Set<String> horariosDisponiveisSet = new HashSet<>();
+
+            for (HorarioDisponivel hd : horariosDoDia) {
+                LocalTime inicio = hd.getHoraInicio();
+                LocalTime fim = hd.getHoraFim();
+
+                for (LocalTime t = inicio; !t.isAfter(fim.minusMinutes(10)); t = t.plusMinutes(10)) {
+                    final LocalTime horarioAtual = t;
+
+                    boolean bloqueado = bloqueiosSemanaisDoDia.stream()
+                            .anyMatch(b -> estaDentroDoIntervalo(horarioAtual, b.getHoraInicio(), b.getHoraFim()))
+                            || bloqueiosEspecificosDoDia.stream()
+                            .anyMatch(b -> estaDentroDoIntervalo(horarioAtual, b.getHoraInicio(), b.getHoraFim()));
+
+                    String horarioStr = horarioAtual.toString();
+
+                    if (bloqueado) {
+                        horariosBloqueados.add(horarioStr);
+                    } else {
+                        horariosDisponiveisSet.add(horarioStr);
+                    }
+                }
+            }
+
+            List<String> horariosBloqueadosList = new ArrayList<>(horariosBloqueados);
+            horariosBloqueadosList.sort(String::compareTo);
+
+            List<String> horariosDisponiveisList = new ArrayList<>(horariosDisponiveisSet);
+            horariosDisponiveisList.sort(String::compareTo);
+
+            listaDias.add(new HorariosPorDiaDTO(
+                    dia.format(DateTimeFormatter.ofPattern("dd/MM")),
+                    horariosBloqueadosList,
+                    horariosDisponiveisList
+            ));
+        }
+
+        // Caso queira juntar os nomes das categorias
+        String nomeCategorias = categorias.stream().map(Categoria::getNome).collect(Collectors.joining(", "));
+
+        return new HorariosPorCategoriaDTO(nomeCategorias, listaDias);
+    }
+
+
+
     private boolean estaDentroDoIntervalo(LocalTime time, LocalTime inicio, LocalTime fim) {
         return !time.isBefore(inicio) && time.isBefore(fim);
     }
+
+
+
 
 private void validarHorario(@Valid DadosBloqueioHorario dados) {
     if (dados.horaInicio().isAfter(dados.horaFim())) {
