@@ -15,7 +15,6 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosDetalhamento
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
 import school.sptech.ApoloInsightsBackEnd.service.AzureBlobService;
 import school.sptech.ApoloInsightsBackEnd.service.CategoriaService;
-
 import java.util.Base64;
 
 @CrossOrigin(origins = "${cors.allowed.origin}")
@@ -36,7 +35,7 @@ public class CategoriaController {
 
         if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
             byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
-            urlFoto = azureBlobService.upload(imagemBytes);
+        urlFoto = azureBlobService.upload(imagemBytes, "categorias");
         }
 
         DadosCadastroCategoria dadosCadastro = new DadosCadastroCategoria(
@@ -62,7 +61,7 @@ public class CategoriaController {
 
         if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
             byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
-            urlFoto = azureBlobService.upload(imagemBytes);
+            urlFoto = azureBlobService.upload(imagemBytes, "categorias");
         }
         DadosAtualizacaoCategoria dadosAtualizacao = new DadosAtualizacaoCategoria(
                 dados.nome(),

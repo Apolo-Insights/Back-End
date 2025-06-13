@@ -13,9 +13,8 @@ import java.util.UUID;
 @Service
 public class AzureBlobService {
     private final String connectionString = "DefaultEndpointsProtocol=https;AccountName=blobgrupo4;AccountKey=vFlz7Wlm++uFOa12X915kX4+2SNxCVcwXtNNKffNF4fE1JdcIwGCMSWeY8KoF1zMxa5hORpJLo61+ASt4ksyVA==;EndpointSuffix=core.windows.net";
-    private final String containerName = "produtos";
 
-    public String upload(byte[] imagemBytes) {
+    public String upload(byte[] imagemBytes, String containerName) {
         BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();

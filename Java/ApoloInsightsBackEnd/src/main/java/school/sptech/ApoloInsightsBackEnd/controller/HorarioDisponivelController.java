@@ -10,7 +10,6 @@ import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosCada
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosDetalhamentoHorario;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.HorariosPorCategoriaDTO;
 import school.sptech.ApoloInsightsBackEnd.service.HorarioDisponivelService;
-
 import java.util.List;
 
 @CrossOrigin(origins = "${cors.allowed.origin}")
@@ -27,17 +26,6 @@ public class HorarioDisponivelController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    @GetMapping("/admin/{idCategoria}")
-//    public ResponseEntity<Map<DayOfWeek, List<String>>> buscarTodosHorariosDisponiveisPorCategoria(@PathVariable Long idCategoria) {
-//        Map<DayOfWeek, List<String>> horarios = service.listarHorariosPorCategoria(idCategoria);
-//        return ResponseEntity.ok(horarios);
-//    }
-
-//    @GetMapping("/admin/todas-categorias")
-//    public ResponseEntity<Map<String, Map<DayOfWeek, List<String>>>> buscarTodosHorariosDisponiveis() {
-//        Map<String, Map<DayOfWeek, List<String>>> horarios = service.listarHorariosDisponiveisTodasCategorias();
-//        return ResponseEntity.ok(horarios);
-//    }
 
     @PutMapping("/admin/bloquear")
     public ResponseEntity<DadosDetalhamentoHorario> bloqueioHorario(@Valid @RequestBody DadosBloqueioHorario dados){

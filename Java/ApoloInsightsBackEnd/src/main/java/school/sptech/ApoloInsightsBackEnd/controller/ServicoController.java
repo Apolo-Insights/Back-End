@@ -35,7 +35,7 @@ public class ServicoController {
 
         if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
             byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
-            urlFoto = azureBlobService.upload(imagemBytes);
+            urlFoto = azureBlobService.upload(imagemBytes, "servicos");
         }
 
         DadosCadastroServico dadosCadastro = new DadosCadastroServico(
@@ -58,7 +58,7 @@ public class ServicoController {
 
         if (dados.fotoBase64() != null && !dados.fotoBase64().isBlank()) {
             byte[] imagemBytes = Base64.getDecoder().decode(dados.fotoBase64());
-            urlFoto = azureBlobService.upload(imagemBytes);
+            urlFoto = azureBlobService.upload(imagemBytes, "servicos");
         }
 
         DadosAtualizacaoServico dadosAtualizacao = new DadosAtualizacaoServico(
