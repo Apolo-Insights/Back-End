@@ -36,8 +36,9 @@ public class BloqueioSemanal {
     private LocalTime horaFim;
 
     public BloqueioSemanal(Categoria categoria, LocalDate data, LocalTime horaInicio, LocalTime horaFim) {
+        int diaSemana = data.getDayOfWeek().getValue() == 0 ? 7 : data.getDayOfWeek().getValue(); // Ajusta Domingo para 7
         this.categoria = categoria;
-        this.diaSemana = data.getDayOfWeek().getValue() % 7;
+        this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
     }

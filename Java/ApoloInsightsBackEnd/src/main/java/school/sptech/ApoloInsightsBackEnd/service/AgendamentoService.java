@@ -1,14 +1,12 @@
 package school.sptech.ApoloInsightsBackEnd.service;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.ApoloInsightsBackEnd.domain.Agendamento;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamento;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosCadastroAgendamentoAdmin;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosHistoricoAgendamento;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.DadosListagemPorCategoria;
+import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.*;
 import school.sptech.ApoloInsightsBackEnd.domain.Servico;
 import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
 import school.sptech.ApoloInsightsBackEnd.repository.AgendamentoRepository;
@@ -41,6 +39,22 @@ public class AgendamentoService {
 
         Agendamento agendamento = new Agendamento(usuario, servico, dados.data(), dados.hora(), dados.formaPagamento());
         return agendamentoRepository.save(agendamento);
+    }
+
+    public List<Agendamento> agendarMultiplo(@Valid DadosCadastroAgendamentoMultiplo dados) {
+        Usuario usuario = usuarioRepository.findById(dados.idUsuario())
+                .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "usuario", "Usuário não encontrado"));
+
+        List<Servico> servicos = servicoRepository.findAllById(dados.idsServicos());
+        if (servicos.isEmpty()) {
+            throw new RequestError(HttpStatus.NOT_FOUND, "servico", "Nenhum serviço encontrado");
+        }
+
+        List<Agendamento> agendamentos = servicos.stream()
+                .map(servico -> new Agendamento(usuario, servico, dados.data(), dados.hora(), dados.formaPagamento()))
+                .toList();
+
+        return agendamentoRepository.saveAll(agendamentos);
     }
 
     @Transactional
@@ -80,4 +94,6 @@ public class AgendamentoService {
                 ))
                 .toList();
     }
+
+
 }

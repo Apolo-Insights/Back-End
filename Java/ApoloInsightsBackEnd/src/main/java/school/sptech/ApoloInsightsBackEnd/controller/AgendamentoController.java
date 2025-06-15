@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.ApoloInsightsBackEnd.domain.Agendamento;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.agendamento.*;
 import school.sptech.ApoloInsightsBackEnd.service.AgendamentoService;
 import java.util.List;
@@ -21,6 +22,12 @@ public class AgendamentoController {
     public ResponseEntity<DadosDetalhamentoAgendamento> agendar(@Valid @RequestBody DadosCadastroAgendamento dados) {
         var agendamento = service.agendar(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoAgendamento(agendamento));
+    }
+
+    @PostMapping("/agendar-multiplo")
+    public ResponseEntity<DadosDetalhamentoAgendamentoMultiplo> agendarMultiplo(@Valid @RequestBody DadosCadastroAgendamentoMultiplo dados) {
+        List<Agendamento> agendamentos = service.agendarMultiplo(dados);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoAgendamentoMultiplo(agendamentos));
     }
 
     @PostMapping("/admin")
