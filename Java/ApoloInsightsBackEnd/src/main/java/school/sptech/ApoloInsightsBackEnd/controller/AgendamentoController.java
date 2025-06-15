@@ -36,7 +36,7 @@ public class AgendamentoController {
         var agendamentos = service.listarHistoricoServicos(idUsuario);
         return ResponseEntity.ok(agendamentos);
     }
-
+        //
     @GetMapping("/admin/{idCategoria}")
     public ResponseEntity<List<DadosListagemPorCategoria>> listarAgendamentosPorCategoria(
             @PathVariable Long idCategoria,
