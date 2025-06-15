@@ -72,14 +72,21 @@ public class HorarioDisponivelService {
     public void bloquearHorario(@Valid DadosBloqueioHorario dados) {
         Categoria categoria = categoriaRepository.findById(dados.idCategoria())
                 .orElseThrow(() -> new RequestError(HttpStatus.NOT_FOUND, "Categoria", "Categoria não encontrada!"));
+        LocalTime horaInicio = dados.horaInicio();
+        LocalTime horaFim = dados.horaFim();
 
-        validarHorario(dados);
+        if (dados.diaInteiro()){
+            horaInicio = LocalTime.parse("00:00");
+            horaFim = LocalTime.parse("23:59");
+        }
+
+        validarHorario(horaInicio, horaFim, dados.data());
 
         if (Boolean.TRUE.equals(dados.repetirSemanalmente())) {
-            var bloqueio = new BloqueioSemanal(categoria, dados); // você cria o construtor
+            var bloqueio = new BloqueioSemanal(categoria, dados.data(), horaInicio, horaFim);
             bloqueioSemanalRepository.save(bloqueio);
         } else {
-            var bloqueio = new BloqueioEspecifico(categoria, dados);
+            var bloqueio = new BloqueioEspecifico(categoria, dados.data(), horaInicio, horaFim);
             bloqueioEspecificoRepository.save(bloqueio);
         }
     }
@@ -287,16 +294,16 @@ public class HorarioDisponivelService {
 
 
 
-private void validarHorario(@Valid DadosBloqueioHorario dados) {
-    if (dados.horaInicio().isAfter(dados.horaFim())) {
+private void validarHorario(LocalTime horaInicio, LocalTime horaFim, LocalDate data) {
+    if (horaInicio.isAfter(horaFim)) {
         throw new RequestError(HttpStatus.BAD_REQUEST, "horarioInicio", "Horário de início não pode ser depois que o horário de fim.");
     }
 
-    if (dados.data() != null && dados.data().isBefore(LocalDate.now())) {
+    if (data != null && data.isBefore(LocalDate.now())) {
         throw new RequestError(HttpStatus.BAD_REQUEST, "data", "Data não pode ser no passado.");
     }
 
-    if (dados.horaInicio().equals(dados.horaFim())) {
+    if (horaInicio.equals(horaFim)) {
         throw new RequestError(HttpStatus.BAD_REQUEST, "horario", "Horário de início não pode ser igual ao horário de fim.");
     }
 }

@@ -35,11 +35,11 @@ public class BloqueioEspecifico {
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
 
-    public BloqueioEspecifico(Categoria categoria, @Valid DadosBloqueioHorario dados) {
+    public BloqueioEspecifico(Categoria categoria, LocalDate data, LocalTime horaInicio, LocalTime horaFim) {
         this.categoria = categoria;
-        this.data = dados.data();
-        this.horaInicio = dados.horaInicio();
-        this.horaFim = dados.horaFim();
+        this.data = data;
+        this.horaInicio = horaInicio;
+        this.horaFim = horaFim;
     }
 
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import school.sptech.ApoloInsightsBackEnd.domain.DTO.horariodisponivel.DadosBloqueioHorario;
+
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -33,10 +35,10 @@ public class BloqueioSemanal {
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
 
-    public BloqueioSemanal(Categoria categoria, @Valid DadosBloqueioHorario dados) {
+    public BloqueioSemanal(Categoria categoria, LocalDate data, LocalTime horaInicio, LocalTime horaFim) {
         this.categoria = categoria;
-        this.diaSemana = dados.data().getDayOfWeek().getValue() % 7;
-        this.horaInicio = dados.horaInicio();
-        this.horaFim = dados.horaFim();
+        this.diaSemana = data.getDayOfWeek().getValue() % 7;
+        this.horaInicio = horaInicio;
+        this.horaFim = horaFim;
     }
 }
