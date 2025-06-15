@@ -44,6 +44,8 @@ public class AgendamentoController {
             @RequestParam(required = false) Integer ano
     ) {
         var agendamentos = service.listarAgendamentosPorCategoria(idCategoria, mes, ano);
+
+
         return ResponseEntity.ok(agendamentos);
     }
 

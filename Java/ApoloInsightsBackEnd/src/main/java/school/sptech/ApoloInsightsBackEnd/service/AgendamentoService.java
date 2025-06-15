@@ -70,6 +70,7 @@ public class AgendamentoService {
 
         return agendamentos.stream()
                 .map(agendamento -> new DadosListagemPorCategoria(
+                        agendamento.getId(),
                         agendamento.getUsuario().getNome(),
                         agendamento.getServico().getNome(),
                         agendamento.getData(),

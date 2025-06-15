@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record DadosListagemPorCategoria(
+        Long idCategoria,
         String cliente,
         String servico,
         LocalDate data,
