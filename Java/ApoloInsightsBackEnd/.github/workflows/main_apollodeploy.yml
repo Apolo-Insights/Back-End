@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy JAR app to Azure Web App - apolloDeploy
 
 on:
@@ -23,13 +26,12 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-        working-directory: ./Java/ApoloInsightsBackEnd
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: Java/ApoloInsightsBackEnd/target/*.jar
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,9 +52,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_802F8DF0AE57490FA703274159648111 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4F869BFA8B9D420D98D79AFF9EEB0C8B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1357D40D6EA04B459F5D7FF4A3379042 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_650E897BBDC545E6A2D8E0372578A17D }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_57CB2D7938C948FFB7C98AF802F48B79 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_11470426594D497AB6BE3CADE6A19090 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
