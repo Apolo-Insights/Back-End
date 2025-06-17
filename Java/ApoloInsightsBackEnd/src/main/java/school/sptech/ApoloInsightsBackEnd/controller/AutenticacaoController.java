@@ -31,9 +31,7 @@ public class   AutenticacaoController {
     @Autowired
     private UsuarioRepository repository;
 
-
     private static final Logger logger = LoggerFactory.getLogger(AutenticacaoController.class);
-
 
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosLogin dados){
