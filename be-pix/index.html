@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code PIX</title>
+</head>
+<body>
+    <h1>QR Code PIX</h1>
+    <p>O QR Code gerado será exibido abaixo:</p>
+    <img id="qrCode" src="" alt="QR Code PIX" />
+    <script>
+        fetch('/qrcode')
+            .then(response => response.text())
+            .then(base64 => {
+                document.getElementById('qrCode').src = base64;
+            })
+            .catch(error => console.error('Erro ao carregar o QR Code:', error));
+    </script>
+</body>
+</html>
