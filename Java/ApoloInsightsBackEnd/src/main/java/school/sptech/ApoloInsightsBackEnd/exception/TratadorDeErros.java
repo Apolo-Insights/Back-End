@@ -1,6 +1,8 @@
 package school.sptech.ApoloInsightsBackEnd.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,27 +13,32 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import school.sptech.ApoloInsightsBackEnd.controller.AutenticacaoController;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestControllerAdvice
 public class
 TratadorDeErros {
+    private static final Logger logger = LoggerFactory.getLogger(TratadorDeErros.class);
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity tratarErro400(MethodArgumentNotValidException ex) {
+        logger.error("Erro de validação: {}", ex.getMessage());
         var erros = ex.getFieldErrors();
         return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity tratarErro400(HttpMessageNotReadableException ex) {
+        logger.error("Erro de leitura da mensagem: {}", ex.getMessage());
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity tratarErroBadCredentials() {
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
     }
 
