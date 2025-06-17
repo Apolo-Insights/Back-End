@@ -104,7 +104,7 @@ public class AtendimentoService {
                                     <p style="font-size: 16px; margin-bottom: 20px;">Olá, <strong>%s</strong>,</p>
                                     <p style="font-size: 16px; margin-bottom: 20px;">Seu agendamento para o serviço <strong>%s</strong> no dia <strong>%s</strong> foi <strong>cancelado</strong>.</p>
                                     <p style="font-size: 16px;">Se desejar reagendar, clique abaixo:</p>
-                                    <a href="%s" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #e83e8c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Reagendar</a>
+                                    <a href="https://red-mud-08f68d01e.6.azurestaticapps.net/" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #e83e8c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Reagendar</a>
                                 </td>
                             </tr>
                             <tr>
