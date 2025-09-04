@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import school.sptech.ApoloInsightsBackEnd.domain.Usuario;
-import school.sptech.ApoloInsightsBackEnd.repository.UsuarioRepository;
+import school.sptech.ApoloInsightsBackEnd.old.domain.Usuario;
+import school.sptech.ApoloInsightsBackEnd.old.repository.UsuarioRepository;
+import school.sptech.ApoloInsightsBackEnd.old.service.AutenticacaoService;
 
 import java.util.Optional;
 
