@@ -1,8 +1,6 @@
 package school.sptech.ApoloInsightsBackEnd.v2.core.application.usecase;
 
-import school.sptech.ApoloInsightsBackEnd.old.domain.Categoria;
-
-import school.sptech.ApoloInsightsBackEnd.v2.core.application.exception.RegistroExistenteException;
+import school.sptech.ApoloInsightsBackEnd.v2.core.application.command.CadastrarServicoCommand;
 import school.sptech.ApoloInsightsBackEnd.v2.core.domain.entity.Servico;
 import school.sptech.ApoloInsightsBackEnd.v2.core.port.in.ServicoGateway;
 
@@ -13,18 +11,16 @@ public class ServicoUseCase {
         this.gateway = gateway;
     }
 
-    public Servico criarServico(Servico servico) {
-        if (gateway.buscarPorId(servico.getId()) != null) throw new RegistroExistenteException("arrumar dps");
+    public Servico criarServico(CadastrarServicoCommand servico) {
 
         Servico novoServico = new Servico(
-                servico.getNome(),
-                servico.getPreco(),
-                servico.getDescricao(),
-                servico.getFoto(),
-                servico.getDuracao(),
-                servico.getCategoria()
-
+                servico.nome(),
+                servico.preco(),
+                servico.descricao(),
+                servico.foto(),
+                servico.duracao(),
+                servico.categoria()
         );
-        return gateway.cadastrar(servico);
+        return gateway.cadastrar(novoServico);
     }
 }
