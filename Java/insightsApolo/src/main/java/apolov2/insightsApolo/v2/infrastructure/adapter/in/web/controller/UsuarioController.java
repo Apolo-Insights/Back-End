@@ -1,20 +1,25 @@
 package apolov2.insightsApolo.v2.infrastructure.adapter.in.web.controller;
 
 import apolov2.insightsApolo.v2.core.application.command.AlterarSenhaCommand;
+import apolov2.insightsApolo.v2.core.application.command.AtualizarUsuarioCommand;
 import apolov2.insightsApolo.v2.core.application.command.CadastrarFuncionarioCommand;
 import apolov2.insightsApolo.v2.core.application.command.CadastrarUsuarioCommand;
 import apolov2.insightsApolo.v2.core.application.usecase.UsuarioUseCase;
 import apolov2.insightsApolo.v2.core.domain.entity.Usuario;
+import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosAtualizacaoUsuario;
 import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosAtualizarSenha;
 import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosCadastroFuncionario;
 import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosCadastroUsuario;
 import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosDetalhamentoUsuario;
+import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosListagemUsuario;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper.UsuarioMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @CrossOrigin(origins = "${cors.allowed.origin}")
@@ -57,6 +62,34 @@ public class UsuarioController {
     public ResponseEntity<Void> alterarSenha(@Valid @RequestBody DadosAtualizarSenha dados) {
         AlterarSenhaCommand command = mapper.atualizarSenhaToCommand(dados);
         useCase.alterarSenha(command);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/admin")
+    @Operation(summary = "Listar usuários", description = "Lista todos os usuários cadastrados no sistema")
+    public ResponseEntity<List<DadosListagemUsuario>> listarUsuarios() {
+        List<Usuario> usuarios = useCase.listarUsuarios();
+        List<DadosListagemUsuario> listagemUsuarios = usuarios.stream()
+                .map(mapper::usuarioToListagem)
+                .toList();
+        return ResponseEntity.ok(listagemUsuarios);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
+    public ResponseEntity<DadosDetalhamentoUsuario> atualizar(
+            @Valid @RequestBody DadosAtualizacaoUsuario dados,
+            @PathVariable Long id) {
+        AtualizarUsuarioCommand command = mapper.atualizacaoToCommand(dados);
+        command.setId(id);
+        Usuario usuario = useCase.atualizarUsuario(command);
+        return ResponseEntity.ok(mapper.usuarioToDetalhamento(usuario));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar usuário", description = "Remove um usuário do sistema pelo ID")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        useCase.deletarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 }

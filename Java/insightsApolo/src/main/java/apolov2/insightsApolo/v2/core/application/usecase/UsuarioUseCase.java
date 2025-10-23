@@ -1,6 +1,7 @@
 package apolov2.insightsApolo.v2.core.application.usecase;
 
 import apolov2.insightsApolo.v2.core.application.command.AlterarSenhaCommand;
+import apolov2.insightsApolo.v2.core.application.command.AtualizarUsuarioCommand;
 import apolov2.insightsApolo.v2.core.application.command.CadastrarFuncionarioCommand;
 import apolov2.insightsApolo.v2.core.application.command.CadastrarUsuarioCommand;
 import apolov2.insightsApolo.v2.core.application.exception.RegistroExistenteException;
@@ -11,6 +12,8 @@ import apolov2.insightsApolo.v2.core.port.out.EmailGateway;
 import apolov2.insightsApolo.v2.infrastructure.util.TokenGenerator;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsuarioUseCase {
@@ -99,6 +102,50 @@ public class UsuarioUseCase {
         
         // Salvar usuário
         gateway.atualizar(usuario);
+    }
+
+    public List<Usuario> listarUsuarios() {
+        List<Usuario> usuarios = gateway.listarTodos();
+        
+        if (usuarios.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum usuário encontrado");
+        }
+        
+        return usuarios;
+    }
+
+    public void deletarUsuario(Long id) {
+        Usuario usuario = gateway.buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+        
+        gateway.deletar(id);
+    }
+
+    public Usuario atualizarUsuario(AtualizarUsuarioCommand command) {
+        Usuario usuario = gateway.buscarPorId(command.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+        
+        // Atualizar apenas os campos não nulos
+        if (command.getNome() != null) {
+            usuario.setNome(command.getNome());
+        }
+        if (command.getTelefone() != null) {
+            usuario.setTelefone(command.getTelefone());
+        }
+        if (command.getEmail() != null) {
+            usuario.setEmail(command.getEmail());
+        }
+        if (command.getGenero() != null) {
+            usuario.setGenero(command.getGenero());
+        }
+        if (command.getCpf() != null) {
+            usuario.setCpf(command.getCpf());
+        }
+        if (command.getFuncao() != null) {
+            usuario.setRole(command.getFuncao());
+        }
+        
+        return gateway.atualizar(usuario);
     }
 
     private void validarSenha(String senha) {

@@ -39,8 +39,16 @@ public class UsuarioEntity implements UserDetails {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, nullable = false, columnDefinition = "VARCHAR(30) DEFAULT 'CLIENTE'")
     private Role role = Role.CLIENTE;
+
+    @PrePersist
+    @PreUpdate
+    private void validateRole() {
+        if (this.role == null) {
+            this.role = Role.CLIENTE;
+        }
+    }
 
     @PostLoad
     private void ensureRoleIsSet() {
