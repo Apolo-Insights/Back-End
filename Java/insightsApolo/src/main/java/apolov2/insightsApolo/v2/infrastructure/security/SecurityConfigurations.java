@@ -41,14 +41,19 @@ public class SecurityConfigurations {
                                 "/v2/usuarios",
                                 "/v2/usuarios/admin",
                                 "/v2/usuarios/gerar-token",
-                                "/usuarios/gerar-token").permitAll()
+                                "/usuarios/gerar-token",
+                                "/v2/agendamentos",
+                                "/v2/agendamentos/agendar-multiplo").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/v2/servicos/*",
                                 "/v2/servicos",
                                 "/v2/produtos/*",
                                 "/v2/produtos",
                                 "/v2/categorias",
-                                "/v2/categorias/*").permitAll()
+                                "/v2/categorias/*",
+                                "/v2/agendamentos/**",
+                                "/v2/horarios-disponiveis/**",
+                                "/v2/dashboard/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,
                                 "/v2/usuarios/alterar-senha").permitAll()
                         .requestMatchers(

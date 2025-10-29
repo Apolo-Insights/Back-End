@@ -2,6 +2,7 @@ package apolov2.insightsApolo.v2.infrastructure.util;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DataHoraUtil {
@@ -16,5 +17,11 @@ public class DataHoraUtil {
     public static String formatarData(LocalDate data) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return data.format(formatter);
+    }
+
+    public static Duration parseISO8601(String duracao) {
+        // Espera uma string no formato HH:mm (ex: "01:30")
+        LocalTime tempo = LocalTime.parse(duracao, formatter);
+        return Duration.between(LocalTime.MIN, tempo);
     }
 }
