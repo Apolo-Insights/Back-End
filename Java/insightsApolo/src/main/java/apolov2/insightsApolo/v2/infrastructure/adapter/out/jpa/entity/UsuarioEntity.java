@@ -2,6 +2,7 @@ package apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity;
 
 import apolov2.insightsApolo.v2.core.domain.util.Genero;
 import apolov2.insightsApolo.v2.core.domain.util.Role;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.converter.RoleConverter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,8 +39,8 @@ public class UsuarioEntity implements UserDetails {
     private String email;
     private String senha;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 30, nullable = false, columnDefinition = "VARCHAR(30) DEFAULT 'CLIENTE'")
+    @Convert(converter = RoleConverter.class)
+    @Column(name = "role", nullable = false)
     private Role role = Role.CLIENTE;
 
     @PrePersist
