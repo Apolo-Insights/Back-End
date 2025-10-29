@@ -23,4 +23,5 @@ public class BloqueioSemanal {
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
     }
+    //
 }
