@@ -33,4 +33,12 @@ public class BloqueioEspecificoEntity {
 
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
+
+    @PrePersist
+    @PreUpdate
+    private void validateData() {
+        if (this.data == null) {
+            throw new IllegalStateException("O campo data não pode ser nulo");
+        }
+    }
 }

@@ -32,4 +32,12 @@ public class BloqueioSemanalEntity {
 
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
+
+    @PrePersist
+    @PreUpdate
+    private void validateDiaSemana() {
+        if (this.diaSemana == null) {
+            throw new IllegalStateException("O campo diaSemana não pode ser nulo");
+        }
+    }
 }

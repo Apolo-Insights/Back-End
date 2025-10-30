@@ -185,11 +185,11 @@ public class HorarioDisponivelUseCase {
                     .toList();
 
             List<BloqueioSemanal> bloqueiosSemanaisDoDia = bloqueiosSemanais.stream()
-                    .filter(b -> b.getDiaSemana() == diaSemana.getValue())
+                    .filter(b -> b.getDiaSemana() != null && b.getDiaSemana() == diaSemana.getValue())
                     .toList();
 
             List<BloqueioEspecifico> bloqueiosEspecificosDoDia = bloqueiosEspecificos.stream()
-                    .filter(b -> b.getData().equals(dia))
+                    .filter(b -> b.getData() != null && b.getData().equals(dia))
                     .toList();
 
             Set<String> horariosBloqueados = new HashSet<>();
