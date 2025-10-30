@@ -80,10 +80,22 @@ public class HorarioDisponivelUseCase {
 
         if (Boolean.TRUE.equals(dados.repetirSemanalmente())) {
             var bloqueio = new BloqueioSemanal(categoria, dados.data(), horaInicio, horaFim);
-            bloqueioSemanalGateway.salvar(bloqueio);
+            System.out.println("🔴 SALVANDO BLOQUEIO SEMANAL:");
+            System.out.println("   Categoria ID: " + categoria.getId());
+            System.out.println("   Dia da semana (valor): " + dados.data().getDayOfWeek().getValue());
+            System.out.println("   Hora início: " + horaInicio);
+            System.out.println("   Hora fim: " + horaFim);
+            var saved = bloqueioSemanalGateway.salvar(bloqueio);
+            System.out.println("   Bloqueio salvo com ID: " + saved.getId());
         } else {
             var bloqueio = new BloqueioEspecifico(categoria, dados.data(), horaInicio, horaFim);
-            bloqueioEspecificoGateway.salvar(bloqueio);
+            System.out.println("🔴 SALVANDO BLOQUEIO ESPECÍFICO:");
+            System.out.println("   Categoria ID: " + categoria.getId());
+            System.out.println("   Data: " + dados.data());
+            System.out.println("   Hora início: " + horaInicio);
+            System.out.println("   Hora fim: " + horaFim);
+            var saved = bloqueioEspecificoGateway.salvar(bloqueio);
+            System.out.println("   Bloqueio salvo com ID: " + saved.getId());
         }
     }
 
@@ -108,6 +120,19 @@ public class HorarioDisponivelUseCase {
         List<HorarioDisponivel> horariosDisponiveis = horarioDisponivelGateway.buscarPorCategoria(categoria);
         List<BloqueioSemanal> bloqueiosSemanais = bloqueioSemanalGateway.buscarPorCategoria(categoria);
         List<BloqueioEspecifico> bloqueiosEspecificos = bloqueioEspecificoGateway.buscarPorCategoria(categoria);
+
+        System.out.println("🔵 BUSCANDO HORÁRIOS:");
+        System.out.println("   Categoria ID: " + categoriaId);
+        System.out.println("   Total de horários disponíveis: " + horariosDisponiveis.size());
+        System.out.println("   Total de bloqueios semanais: " + bloqueiosSemanais.size());
+        System.out.println("   Total de bloqueios específicos: " + bloqueiosEspecificos.size());
+        
+        if (!bloqueiosSemanais.isEmpty()) {
+            System.out.println("   Bloqueios semanais:");
+            bloqueiosSemanais.forEach(b -> 
+                System.out.println("      Dia: " + b.getDiaSemana() + ", Horário: " + b.getHoraInicio() + "-" + b.getHoraFim())
+            );
+        }
 
         List<HorariosPorDiaDTO> listaDias = processarHorariosPorMes(
                 horariosDisponiveis, 
@@ -191,6 +216,12 @@ public class HorarioDisponivelUseCase {
             List<BloqueioEspecifico> bloqueiosEspecificosDoDia = bloqueiosEspecificos.stream()
                     .filter(b -> b.getData() != null && b.getData().equals(dia))
                     .toList();
+
+            if (!bloqueiosSemanaisDoDia.isEmpty() || !bloqueiosEspecificosDoDia.isEmpty()) {
+                System.out.println("🟢 PROCESSANDO DIA " + dia + " (" + diaSemana + ", value=" + diaSemana.getValue() + ")");
+                System.out.println("   Bloqueios semanais para este dia: " + bloqueiosSemanaisDoDia.size());
+                System.out.println("   Bloqueios específicos para este dia: " + bloqueiosEspecificosDoDia.size());
+            }
 
             Set<String> horariosBloqueados = new HashSet<>();
             Set<String> horariosDisponiveisSet = new HashSet<>();
