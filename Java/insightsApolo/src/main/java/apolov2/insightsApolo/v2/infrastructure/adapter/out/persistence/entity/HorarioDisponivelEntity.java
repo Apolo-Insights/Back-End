@@ -1,5 +1,6 @@
 package apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.entity;
 
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.converter.DayOfWeekConverter;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.CategoriaEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class HorarioDisponivelEntity {
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaEntity categoria;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DayOfWeekConverter.class)
     @Column(name = "dia_semana", nullable = false)
     private DayOfWeek diaSemana;
 
@@ -34,4 +35,7 @@ public class HorarioDisponivelEntity {
 
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
+
+    @Column(name = "bloqueado", nullable = false)
+    private Boolean bloqueado = false;
 }
