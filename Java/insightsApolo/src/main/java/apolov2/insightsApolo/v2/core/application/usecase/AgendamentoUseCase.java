@@ -50,7 +50,12 @@ public class AgendamentoUseCase {
             throw new IllegalArgumentException("Serviço não encontrado");
         }
 
-        Agendamento agendamento = new Agendamento(usuario, servico, command.data(), command.hora());
+        Agendamento agendamento;
+        if (command.formaPagamento() != null) {
+            agendamento = new Agendamento(usuario, servico, command.data(), command.hora(), command.formaPagamento());
+        } else {
+            agendamento = new Agendamento(usuario, servico, command.data(), command.hora());
+        }
 
         return agendamentoGateway.salvar(agendamento);
     }

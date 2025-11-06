@@ -17,7 +17,17 @@ import org.mapstruct.Mapper;
 public interface AgendamentoMapper {
     AgendarCommand cadastroToCommand(DadosCadastroAgendamento dados);
     AgendarMultiploCommand cadastroToCommand(DadosCadastroAgendamentoMultiplo dados);
-    AgendarCommand cadastroAdminToCommand(DadosCadastroAgendamentoAdmin dados);
+    
+    default AgendarCommand cadastroAdminToCommand(DadosCadastroAgendamentoAdmin dados) {
+        return new AgendarCommand(
+            dados.idUsuario(),
+            dados.idServico(),
+            dados.data(),
+            dados.hora(),
+            null // Admin não especifica forma de pagamento
+        );
+    }
+    
     Agendamento entityToAgendamento(AgendamentoEntity entity);
     AgendamentoEntity agendamentoToEntity(Agendamento agendamento);
 }
