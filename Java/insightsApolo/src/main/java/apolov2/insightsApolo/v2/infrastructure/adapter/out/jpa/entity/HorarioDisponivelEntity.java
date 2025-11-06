@@ -1,21 +1,22 @@
-package apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.entity;
+package apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity;
 
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.CategoriaEntity;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.converter.DayOfWeekConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "bloqueio_semanal")
+@Table(name = "horarios_disponiveis")
 @AllArgsConstructor
 @NoArgsConstructor
-public class BloqueioSemanalEntity {
+public class HorarioDisponivelEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +25,9 @@ public class BloqueioSemanalEntity {
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaEntity categoria;
 
+    @Convert(converter = DayOfWeekConverter.class)
     @Column(name = "dia_semana", nullable = false)
-    private Integer diaSemana; // 1 = Segunda, 7 = Domingo
+    private DayOfWeek diaSemana;
 
     @Column(name = "hora_inicio", nullable = false)
     private LocalTime horaInicio;
@@ -33,11 +35,6 @@ public class BloqueioSemanalEntity {
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
 
-    @PrePersist
-    @PreUpdate
-    private void validateDiaSemana() {
-        if (this.diaSemana == null) {
-            throw new IllegalStateException("O campo diaSemana não pode ser nulo");
-        }
-    }
+    @Column(name = "bloqueado", nullable = false)
+    private Boolean bloqueado = false;
 }

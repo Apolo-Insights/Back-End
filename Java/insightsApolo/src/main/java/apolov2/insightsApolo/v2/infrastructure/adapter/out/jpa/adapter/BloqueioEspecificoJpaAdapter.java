@@ -1,12 +1,12 @@
-package apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.adapter;
+package apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.adapter;
 
 import apolov2.insightsApolo.v2.core.domain.entity.BloqueioEspecifico;
 import apolov2.insightsApolo.v2.core.domain.entity.Categoria;
 import apolov2.insightsApolo.v2.core.domain.port.BloqueioEspecificoGateway;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.CategoriaEntity;
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.mapper.BloqueioEspecificoMapper;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper.BloqueioEspecificoMapper;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper.CategoriaMapper;
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.repository.BloqueioEspecificoRepository;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.repository.BloqueioEspecificoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

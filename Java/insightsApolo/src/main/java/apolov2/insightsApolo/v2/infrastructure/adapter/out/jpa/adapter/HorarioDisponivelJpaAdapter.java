@@ -1,12 +1,12 @@
-package apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.adapter;
+package apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.adapter;
 
 import apolov2.insightsApolo.v2.core.domain.entity.Categoria;
 import apolov2.insightsApolo.v2.core.domain.entity.HorarioDisponivel;
 import apolov2.insightsApolo.v2.core.domain.port.HorarioDisponivelGateway;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.CategoriaEntity;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper.CategoriaMapper;
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.mapper.HorarioDisponivelMapper;
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.repository.HorarioDisponivelRepository;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper.HorarioDisponivelMapper;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.repository.HorarioDisponivelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

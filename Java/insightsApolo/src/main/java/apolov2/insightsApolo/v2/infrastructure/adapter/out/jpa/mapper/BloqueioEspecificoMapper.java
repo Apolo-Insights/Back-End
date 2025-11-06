@@ -1,8 +1,7 @@
-package apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.mapper;
+package apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper;
 
 import apolov2.insightsApolo.v2.core.domain.entity.BloqueioEspecifico;
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.mapper.CategoriaMapper;
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.entity.BloqueioEspecificoEntity;
+import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.BloqueioEspecificoEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {CategoriaMapper.class})

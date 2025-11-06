@@ -40,7 +40,7 @@ public class UsuarioEntity implements UserDetails {
     private String senha;
 
     @Convert(converter = RoleConverter.class)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(50)")
     private Role role = Role.CLIENTE;
 
     @PrePersist

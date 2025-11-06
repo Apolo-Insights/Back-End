@@ -1,6 +1,5 @@
-package apolov2.insightsApolo.v2.infrastructure.adapter.out.persistence.entity;
+package apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity;
 
-import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.CategoriaEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

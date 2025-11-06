@@ -5,38 +5,43 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
-public class RoleConverter implements AttributeConverter<Role, Integer> {
+public class RoleConverter implements AttributeConverter<Role, String> {
 
     @Override
-    public Integer convertToDatabaseColumn(Role role) {
+    public String convertToDatabaseColumn(Role role) {
         if (role == null) {
-            return null;
+            return "CLIENTE";
         }
-        // Mapear Role para o formato legado numérico
-        // 0=CLIENTE, 1=ADMIN, 2=ESTETICISTA, 3=CABELEIREIRO, 4=MANICURE_PEDICURE
-        return switch (role) {
-            case CLIENTE -> 0;
-            case ADMIN -> 1;
-            case ESTETICISTA -> 2;
-            case CABELEIREIRO -> 3;
-            case MANICURE_PEDICURE -> 4;
-        };
+        // Salvar como STRING para manter compatibilidade
+        return role.name();
     }
 
     @Override
-    public Role convertToEntityAttribute(Integer dbData) {
-        if (dbData == null) {
+    public Role convertToEntityAttribute(String dbData) {
+        if (dbData == null || dbData.trim().isEmpty()) {
             return Role.CLIENTE; // Valor padrão
         }
 
-        // Converter valores numéricos do banco para o enum Role
-        return switch (dbData) {
-            case 0 -> Role.CLIENTE;
-            case 1 -> Role.ADMIN;
-            case 2 -> Role.ESTETICISTA;
-            case 3 -> Role.CABELEIREIRO;
-            case 4 -> Role.MANICURE_PEDICURE;
-            default -> Role.CLIENTE; // Fallback para valor desconhecido
-        };
+        // Tentar primeiro como string
+        try {
+            return Role.valueOf(dbData.trim().toUpperCase());
+        } catch (IllegalArgumentException e1) {
+            // Se falhar, tentar como número (dados legados)
+            try {
+                Integer numeroRole = Integer.parseInt(dbData.trim());
+                return switch (numeroRole) {
+                    case 0 -> Role.CLIENTE;
+                    case 1 -> Role.ADMIN;
+                    case 2 -> Role.ESTETICISTA;
+                    case 3 -> Role.CABELEIREIRO;
+                    case 4 -> Role.MANICURE_PEDICURE;
+                    default -> Role.CLIENTE;
+                };
+            } catch (NumberFormatException e2) {
+                // Se nem string nem número funcionam, usar padrão
+                System.err.println("Valor role inválido no banco: " + dbData + ". Usando CLIENTE como padrão.");
+                return Role.CLIENTE;
+            }
+        }
     }
 }
