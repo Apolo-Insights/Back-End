@@ -22,7 +22,7 @@ jobs:
           java-version: '21'
 
       - name: Build do Project
-        working-directory: ./insightsApolo
+        working-directory: insightsApolo
         run: mvn -B clean package -DskipTests
 
       - name: Log in to Docker Hub
