@@ -50,7 +50,7 @@ jobs:
           whoami
 
       - name: Liberar portas
-        run: sudo ufw allow 8080/tcp && sudo ufw allow 3306/tcp || true
+        run: sudo ufw allow 8080/tcp || true
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -70,11 +70,12 @@ jobs:
           sudo docker ps -a --filter "ancestor=$TARGET_IMAGE" --format '{{.ID}}' | xargs -r sudo docker rm -f || true
           sudo docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | awk -v img="$TARGET_IMAGE" '$0 ~ img {print $2}' | xargs -r sudo docker rmi -f || true
 
-      - name: Criar env file seguro + RabbitMQ check + rodar container
+      - name: Criar env file seguro e rodar container
         run: |
           set -euo pipefail
           ENV_FILE="$RUNNER_TEMP/insightsApolo.env"
           mkdir -p "$RUNNER_TEMP"
+
           cat > "$ENV_FILE" <<'EOF'
           SPRING_PROFILES_ACTIVE=prod
           AWS_ACCESS_KEY_ID=${{ secrets._ACCESS_ID }}
@@ -82,33 +83,7 @@ jobs:
           AWS_SESSION_TOKEN=${{ secrets._SESSION_TOKEN }}
           EOF
 
-          sudo sed -i 's/\r$//' "$ENV_FILE" || true
           sudo chmod 600 "$ENV_FILE"
-
-          RABBIT_PROPERTIES_FILE="$(pwd)/src/main/resources/application.properties"
-          RABBIT_HOST=""
-          RABBIT_PORT=""
-          if [ -f "$RABBIT_PROPERTIES_FILE" ]; then
-            RABBIT_HOST=$(grep -E '^spring.rabbitmq.host=' "$RABBIT_PROPERTIES_FILE" | sed 's/^spring.rabbitmq.host=//' | tr -d '\r' || true)
-            RABBIT_PORT=$(grep -E '^spring.rabbitmq.port=' "$RABBIT_PROPERTIES_FILE" | sed 's/^spring.rabbitmq.port=//' | tr -d '\r' || true)
-          fi
-          RABBIT_HOST=${RABBIT_HOST:-localhost}
-          RABBIT_PORT=${RABBIT_PORT:-5672}
-
-          retries=5
-          for i in $(seq 1 $retries); do
-            if command -v nc >/dev/null 2>&1; then
-              if nc -z -w3 "$RABBIT_HOST" "$RABBIT_PORT" >/dev/null 2>&1; then reachable=1; break; fi
-            else
-              if bash -c "cat < /dev/tcp/$RABBIT_HOST/$RABBIT_PORT" >/dev/null 2>&1; then reachable=1; break; fi
-            fi
-            sleep 2
-          done
-
-          if [ -z "${reachable+x}" ]; then
-            echo "ERROR: RabbitMQ NOT reachable"
-            exit 1
-          fi
 
           sudo docker run -d --name insightsApolo-back \
             --add-host=host.docker.internal:host-gateway \
@@ -117,7 +92,7 @@ jobs:
             -p 8080:8080 \
             "${{ env.IMAGE }}"
 
-          if command -v shred >/dev/null 2>&1; then sudo shred -u "$ENV_FILE"; else sudo rm -f "$ENV_FILE"; fi
+          sudo rm -f "$ENV_FILE"
 
       - name: Logs finais
         run: sudo docker logs --tail 200 insightsApolo-back || true
@@ -133,7 +108,7 @@ jobs:
           whoami
 
       - name: Liberar portas
-        run: sudo ufw allow 8080/tcp && sudo ufw allow 3306/tcp || true
+        run: sudo ufw allow 8080/tcp || true
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -153,11 +128,12 @@ jobs:
           sudo docker ps -a --filter "ancestor=$TARGET_IMAGE" --format '{{.ID}}' | xargs -r sudo docker rm -f || true
           sudo docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | awk -v img="$TARGET_IMAGE" '$0 ~ img {print $2}' | xargs -r sudo docker rmi -f || true
 
-      - name: Criar env file seguro + RabbitMQ check + rodar container
+      - name: Criar env file seguro e rodar container
         run: |
           set -euo pipefail
           ENV_FILE="$RUNNER_TEMP/insightsApolo.env"
           mkdir -p "$RUNNER_TEMP"
+
           cat > "$ENV_FILE" <<'EOF'
           SPRING_PROFILES_ACTIVE=prod
           AWS_ACCESS_KEY_ID=${{ secrets._ACCESS_ID }}
@@ -166,32 +142,6 @@ jobs:
           EOF
 
           sudo chmod 600 "$ENV_FILE"
-
-          # RabbitMQ check igual ao job anterior...
-          RABBIT_PROPERTIES_FILE="$(pwd)/src/main/resources/application.properties"
-          RABBIT_HOST=""
-          RABBIT_PORT=""
-          if [ -f "$RABBIT_PROPERTIES_FILE" ]; then
-            RABBIT_HOST=$(grep -E '^spring.rabbitmq.host=' "$RABBIT_PROPERTIES_FILE" | sed 's/^spring.rabbitmq.host=//' | tr -d '\r' || true)
-            RABBIT_PORT=$(grep -E '^spring.rabbitmq.port=' "$RABBIT_PROPERTIES_FILE" | sed 's/^spring.rabbitmq.port=//' | tr -d '\r' || true)
-          fi
-          RABBIT_HOST=${RABBIT_HOST:-localhost}
-          RABBIT_PORT=${RABBIT_PORT:-5672}
-
-          retries=5
-          for i in $(seq 1 $retries); do
-            if command -v nc >/dev/null 2>&1; then
-              if nc -z -w3 "$RABBIT_HOST" "$RABBIT_PORT" >/dev/null 2>&1; then reachable=1; break; fi
-            else
-              if bash -c "cat < /dev/tcp/$RABBIT_HOST/$RABBIT_PORT" >/dev/null 2>&1; then reachable=1; break; fi
-            fi
-            sleep 2
-          done
-
-          if [ -z "${reachable+x}" ]; then
-            echo "ERROR: RabbitMQ NOT reachable"
-            exit 1
-          fi
 
           sudo docker run -d --name insightsApolo-back \
             --restart unless-stopped \
