@@ -1,11 +1,13 @@
 package apolov2.insightsApolo.v2.infrastructure.adapter.in.web.controller;
 
 import apolov2.insightsApolo.v2.core.domain.entity.Usuario;
+import apolov2.insightsApolo.v2.infrastructure.DTO.LogDTO;
 import apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto.DadosLogin;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.entity.UsuarioEntity;
 import apolov2.insightsApolo.v2.infrastructure.adapter.out.jpa.repository.UsuarioRepository;
 import apolov2.insightsApolo.v2.infrastructure.security.DadosTokenJWT;
 import apolov2.insightsApolo.v2.infrastructure.security.TokenService;
+import apolov2.insightsApolo.v2.infrastructure.sercive.MessageProducer;
 import apolov2.insightsApolo.v2.infrastructure.util.SenhaUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,6 +37,9 @@ public class AutenticacaoController {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private MessageProducer messageProducer;
 
     private static final Logger logger = LoggerFactory.getLogger(AutenticacaoController.class);
 
@@ -69,6 +74,28 @@ public class AutenticacaoController {
         var tokenJWT = tokenService.gerarToken(usuario);
         
         logger.info("Token JWT gerado com sucesso para usuário: {}", login);
+        
+        // Enviar log de login para o RabbitMQ
+        try {
+            String nomeUsuario = usuarioEntity.getNome() != null ? usuarioEntity.getNome() : "Usuário sem nome";
+            String emailUsuario = usuarioEntity.getEmail() != null ? usuarioEntity.getEmail() : "Sem email";
+            String descricao = String.format("Login realizado com sucesso - Email: %s | CPF: %s", 
+                    emailUsuario, 
+                    usuarioEntity.getCpf() != null ? usuarioEntity.getCpf() : "N/A");
+            
+            LogDTO logLogin = new LogDTO(
+                    "LOGIN",
+                    nomeUsuario,
+                    descricao
+            );
+            
+            messageProducer.enviarLog(logLogin);
+            logger.info("Log de login enviado para RabbitMQ - Usuário: {}", nomeUsuario);
+        } catch (Exception e) {
+            logger.error("Erro ao enviar log de login para RabbitMQ: {}", e.getMessage(), e);
+            // Não falha o login se houver erro no envio do log
+        }
+        
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 
