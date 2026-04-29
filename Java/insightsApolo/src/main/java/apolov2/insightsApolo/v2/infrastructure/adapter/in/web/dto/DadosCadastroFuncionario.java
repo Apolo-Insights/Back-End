@@ -1,0 +1,23 @@
+package apolov2.insightsApolo.v2.infrastructure.adapter.in.web.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import apolov2.insightsApolo.v2.core.domain.util.Role;
+
+public record DadosCadastroFuncionario(
+        @NotBlank(message = "Nome inválido")
+        String nome,
+
+        @NotBlank(message = "Telefone inválido")
+        String telefone,
+
+        @NotBlank(message = "CPF inválido")
+        String cpf,
+
+        @NotBlank(message = "Email inválido")
+        String email,
+
+        @NotNull(message = "Função inválida")
+        Role funcao
+) {
+}

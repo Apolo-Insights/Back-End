@@ -4,12 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.produto.*;
-import school.sptech.ApoloInsightsBackEnd.domain.Produto;
-import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
-import school.sptech.ApoloInsightsBackEnd.repository.ProdutoRepository;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.produto.DadosAtualizacaoProduto;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.produto.DadosCadastroProduto;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.produto.DadosListagemProduto;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.produto.ProdutoDetalhesDTO;
+import school.sptech.ApoloInsightsBackEnd.old.domain.Produto;
+import school.sptech.ApoloInsightsBackEnd.old.repository.ProdutoRepository;
+import school.sptech.ApoloInsightsBackEnd.old.service.ProdutoService;
 
 import java.util.*;
 

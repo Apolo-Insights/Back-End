@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
-import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosAtualizacaoCategoria;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosCadastroCategoria;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.categoria.DadosListagemCategoria;
-import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
-import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
+import school.sptech.ApoloInsightsBackEnd.old.domain.Categoria;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.categoria.DadosAtualizacaoCategoria;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.categoria.DadosCadastroCategoria;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.categoria.DadosListagemCategoria;
+import school.sptech.ApoloInsightsBackEnd.old.exception.RequestError;
+import school.sptech.ApoloInsightsBackEnd.old.repository.CategoriaRepository;
+import school.sptech.ApoloInsightsBackEnd.old.service.CategoriaService;
 
 import java.util.*;
 

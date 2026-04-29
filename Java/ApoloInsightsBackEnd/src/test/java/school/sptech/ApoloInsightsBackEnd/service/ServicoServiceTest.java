@@ -5,16 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import school.sptech.ApoloInsightsBackEnd.domain.Categoria;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosAtualizacaoServico;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosCadastroServico;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.servico.DadosListagemServico;
-import school.sptech.ApoloInsightsBackEnd.domain.Servico;
-import school.sptech.ApoloInsightsBackEnd.exception.RequestError;
-import school.sptech.ApoloInsightsBackEnd.repository.CategoriaRepository;
-import school.sptech.ApoloInsightsBackEnd.repository.ServicoRepository;
+import school.sptech.ApoloInsightsBackEnd.old.domain.Categoria;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.servico.DadosAtualizacaoServico;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.servico.DadosCadastroServico;
+import school.sptech.ApoloInsightsBackEnd.old.domain.DTO.servico.DadosListagemServico;
+import school.sptech.ApoloInsightsBackEnd.old.domain.Servico;
+import school.sptech.ApoloInsightsBackEnd.old.repository.CategoriaRepository;
+import school.sptech.ApoloInsightsBackEnd.old.repository.ServicoRepository;
+import school.sptech.ApoloInsightsBackEnd.old.service.ServicoService;
 
 import java.util.*;
 

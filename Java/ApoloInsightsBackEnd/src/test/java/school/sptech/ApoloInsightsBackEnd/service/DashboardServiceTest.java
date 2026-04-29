@@ -3,16 +3,11 @@ package school.sptech.ApoloInsightsBackEnd.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
-import school.sptech.ApoloInsightsBackEnd.domain.DTO.dashboard.DadosDashboard;
-import school.sptech.ApoloInsightsBackEnd.repository.DashboardRepository;
+import school.sptech.ApoloInsightsBackEnd.old.repository.DashboardRepository;
+import school.sptech.ApoloInsightsBackEnd.old.service.DashboardService;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class DashboardServiceTest {
